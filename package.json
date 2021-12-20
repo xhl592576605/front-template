@@ -5,14 +5,16 @@
     "nohoist": [
     ],
     "packages": [
-      "packages/*"
+      "packages/@front/*"
     ]
   },
   "scripts": {
     "commit": "git-cz",
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
-    "version": "lerna version --conventional-commits"
+    "version": "lerna version --conventional-commits",
+    "package:build": "lerna run --stream --scope @front/package-template build"
+
   },
   "config": {
     "commitizen": {
@@ -26,7 +28,7 @@
     }
   },
   "lint-staged": {
-    "packages/*/src/*.ts": [
+    "packages/@front/*/src/*.ts": [
       "eslint --fix",
       "git add"
     ]
