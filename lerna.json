@@ -1,0 +1,13 @@
+{
+  "npmClient": "yarn",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "bootstrap": {
+      "hoist": true
+    }
+  },
+  "useWorkspaces": true,
+  "version": "0.0.1"
+}
