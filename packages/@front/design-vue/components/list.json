@@ -1,0 +1,14 @@
+[
+  {
+    "compName": "Button",
+    "compZhName": "按钮",
+    "compDesc": "这是一个按钮",
+    "compClassName": "button"
+  },
+  {
+    "compName": "Test",
+    "compZhName": "测试",
+    "compDesc": "测试",
+    "compClassName": "test"
+  }
+]

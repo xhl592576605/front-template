@@ -1,0 +1,50 @@
+{
+  "name": "@front/design-vue",
+  "version": "0.0.0",
+  "outputName": "DesignVue",
+  "main": "dist/DesignVue.es.js",
+  "umd": "dist/DesignVue.umd.js",
+  "types": "dist/components/index.d.ts",
+  "files": [
+    "dist",
+    "components",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite --config ./build/base.config.ts",
+    "build:doc": "vue-tsc --noEmit && vite build --config ./build/doc.config.ts && node script/copyDir.js",
+    "build:lib": "vue-tsc --noEmit && vite build --config ./build/lib.config.ts",
+    "preview": "vite preview",
+    "lint:components": "eslint --ext .ts,.vue --fix components/",
+    "lint:src": "eslint --ext .ts,.vue --fix src/ ",
+    "lint": "npm run \"lint:components\" && npm run lint:src",
+    "genNewComp": "node ./script/generate-template-comp/index.js"
+  },
+  "dependencies": {
+    "prismjs": "^1.25.0",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.16.6",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "eslint": "^8.4.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-vue": "^8.2.0",
+    "sass": "^1.45.1",
+    "@types/node": "^16.11.12",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "fs-extra": "^10.0.0",
+    "handlebars": "^4.7.7",
+    "inquirer": "^8.2.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.0",
+    "vite-plugin-copy": "^0.1.6",
+    "vite-plugin-dts": "^0.9.6",
+    "vite-plugin-md": "^0.11.4",
+    "vue-tsc": "^0.28.10"
+  }
+}

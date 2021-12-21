@@ -19,6 +19,15 @@ yarn run clean # 删除所有node_modules 或者自己文件夹删除
 yarn  --ignore-scripts # 安装依赖
 ```
 
+### desgin-vue
+``` bash
+yarn designVue:dev # vue组件库开发
+yarn designVue:build-lib # 编译vue组件库
+yarn designVue:build-docs # 编译vue组件库文档
+yarn designVue:lint # vue组件库代码检查
+yarn designVue:newComp # 命名行创建vue组件模板
+```
+
 ## git提交
 - feat：新功能（feature）
 - fix：修补bug
