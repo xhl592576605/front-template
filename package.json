@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "commit": "git-cz",
-    "bootstrap": "lerna bootstrap",
-    "clean": "lerna clean",
-    "version": "lerna version --conventional-commits"
+    "clean": "rm -rf node_modules **/*/node_modules",
+    "package:build": "pnpm  build --filter @front/package-template"
+
   },
   "config": {
     "commitizen": {
