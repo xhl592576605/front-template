@@ -2,7 +2,6 @@
 *.rar
 .DS_Store
 node_modules
-packages
 
 # local env files
 .env.local
