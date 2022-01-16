@@ -1,5 +1,5 @@
-## pnpm-template
->  pnpm-template 项目模板
+## pnpm-components
+>  pnpm-components 项目模板
 
 ## git提交
 - feat：新功能（feature）

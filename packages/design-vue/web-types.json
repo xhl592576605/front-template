@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
+  "framework": "vue",
+  "name": "naive-ui",
+  "version": "0.0.0",
+  "contributions": {
+    "html": {
+      "tags": [],
+      "attributes": [],
+      "types-syntax": "typescript"
+    }
+  }
+}

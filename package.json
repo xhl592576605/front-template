@@ -4,7 +4,9 @@
   "scripts": {
     "commit": "git-cz",
     "clean": "rm -rf node_modules **/*/node_modules",
-    "package:build": "pnpm  build --filter @front/package-template"
+    "package:build": "pnpm build --filter @front/package-template",
+    "desginVue:start": "pnpm start --filter @front/design-vue",
+    "desginVue:build": "pnpm build:package --filter @front/design-vue"
 
   },
   "config": {
