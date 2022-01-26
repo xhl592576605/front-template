@@ -1,13 +1,25 @@
+
+# aside
+asda
 <template>
-  <div class="sheet-music-demo">
-    <sheet-music></sheet-music>
-  </div>
+  <demo-sort :cols="1">
+    <basic />
+  </demo-sort>
 </template>
 
 <script lang="ts">
+import Basic from './basic.vue';
+import CN from '../index.zh-CN.md';
+import US from '../index.zh-US.md';
+
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'SheetMusicDemo',
+  CN,
+  US,
+  components:{
+    Basic,
+  },
   setup() {
     return{};
   },
