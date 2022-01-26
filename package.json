@@ -13,12 +13,7 @@
     "version": "lerna version --conventional-commits",
     "package:build": "lerna run --stream --scope @front/package-template build",
     "designVue:dev": "lerna run --stream --scope @front/design-vue dev",
-    "designVue:build-lib": "lerna run --stream --scope @front/design-vue build:lib",
-    "designVue:build-docs": "lerna run --stream --scope @front/design-vue build:doc",
-    "designVue:lint": "lerna run --stream --scope @front/design-vue lint",
-    "designVue:newComp": "yarn workspace @front/design-vue genNewComp"
-
-
+    "designVue:build-lib": "lerna run --stream --scope @front/design-vue compile"
   },
   "config": {
     "commitizen": {

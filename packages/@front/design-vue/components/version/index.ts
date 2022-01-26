@@ -1,3 +1,5 @@
-import { version } from '../../package.json'
+import pkg from '../../package.json';
 
-export default version
+const { version } = pkg;
+
+export default version;

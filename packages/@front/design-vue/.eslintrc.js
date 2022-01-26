@@ -1,48 +1,100 @@
 module.exports = {
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/typescript/recommended',
-    'airbnb-base'],
+  root: true,
   env: {
     browser: true,
     node: true,
+    jasmine: true,
+    jest: true,
     es6: true,
-    'vue/setup-compiler-macros': true
   },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module'
+    parser: 'babel-eslint',
   },
-  // parser: 'vue-eslint-parser',
-  rules: {
-    // 自己写一些想配置的规则
-    semi: 'off',
-    quotes: ['error', 'single'],
-    indent: 2,
-    camelcase: 2,
-    'comma-dangle': 'off',
-    'no-console': 'off',
-    'no-nested-ternary': 'off',
-    'no-bitwise': 'off',
-    'import/no-extraneous-dependencies': 'off',
-    'import/no-unresolved': 'off',
-    'import/prefer-default-export': 'off',
-    'import/extensions': 'off',
-    'import/no-named-default': 'off',
-    'func-names': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'consistent-return': 'off',
-    'vue/multi-word-component-names': 'off'
-  },
+  extends: [
+    'plugin:vue/vue3-recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'prettier',
+  ],
+  plugins: ['markdown', 'jest', '@typescript-eslint', 'import'],
   overrides: [
     {
-      files: ['*.vue'],
+      files: ['*.md'],
+      processor: 'markdown/markdown',
       rules: {
-        // 这里写覆盖vue文件的规则
-        'vue/valid-define-props': 'off',
-        'vue/multi-word-component-names': 'off'
-      }
-    }
-  ]
+        'no-console': 'off',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: ['@vue/typescript/recommended', '@vue/prettier', '@vue/prettier/@typescript-eslint'],
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      rules: {
+        '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/ban-types': 0,
+        '@typescript-eslint/consistent-type-imports': 'error',
+        '@typescript-eslint/explicit-module-boundary-types': 0,
+        '@typescript-eslint/no-empty-function': 0,
+        '@typescript-eslint/no-non-null-assertion': 0,
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
+        ],
+        '@typescript-eslint/ban-ts-comment': 0,
+      },
+    },
+    {
+      files: ['*.vue'],
+      parser: 'vue-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+      },
+      rules: {
+        'no-console': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
+        ],
+      },
+    },
+  ],
+  rules: {
+    'import/no-named-as-default': 'off',
+    'import/namespace': [2, { allowComputed: true }],
+    'import/no-named-as-default-member': 'off',
+    'import/no-unresolved': [2, { ignore: ['ant-design-vue'] }],
+    'comma-dangle': [2, 'always-multiline'],
+    'no-var': 'error',
+    'no-console': [2, { allow: ['warn', 'error'] }],
+    'object-shorthand': 2,
+    'no-unused-vars': [2, { ignoreRestSiblings: true, argsIgnorePattern: '^_' }],
+    'no-undef': 2,
+    camelcase: 'off',
+    'no-extra-boolean-cast': 'off',
+    semi: ['error', 'always'],
+    'vue/no-v-html': 'off',
+    'vue/require-explicit-emits': 'off',
+    'vue/require-prop-types': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/no-reserved-keys': 'off',
+    'vue/comment-directive': 'off',
+    'vue/prop-name-casing': 'off',
+    'vue/one-component-per-file': 'off',
+    'vue/custom-event-name-casing': 'off',
+    'vue/v-on-event-hyphenation': 'off',
+    'vue/max-attributes-per-line': [
+      2,
+      {
+        singleline: 20,
+        multiline: 1,
+      },
+    ],
+    'vue/multi-word-component-names': 'off',
+  },
+  globals: {
+    h: true,
+  },
 };

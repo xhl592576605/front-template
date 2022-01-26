@@ -1,3 +1,1 @@
-export { default as Button } from './button'
-
-export { default as Test } from './test'
+export { default as SheetMusic } from './sheet-music';
