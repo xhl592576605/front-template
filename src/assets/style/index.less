@@ -1,0 +1,60 @@
+.full {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+html,
+body {
+  .full();
+  background-color: #fff;
+}
+
+#app {
+  .full();
+  .flex-center();
+
+  .box {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    background-color: rgba(255, 0, 255, 0.2);
+    transform: rotate(45deg);
+    animation: appScanle 1s ease-in-out infinite;
+    position: relative;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      left: 50px;
+      right: 50px;
+      border-radius: 100%;
+      animation: appScanle 1s 0.5s ease-in-out infinite;
+      background-color: rgba(255, 255, 0, 0.3);
+    }
+  }
+}
+
+@keyframes appScanle {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(2);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
