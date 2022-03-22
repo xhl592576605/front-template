@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: ['prettier'],
   rules: {
-    semi: 'off',
+    semi: 'warn',
     'no-console':'warn',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   }
