@@ -9,10 +9,13 @@
     "build": "webpack --config ./build/webpack.config.js",
     "dev": "webpack serve --config ./build/webpack.config.js",
     "prettier": "prettier --write .",
-    "eslint": "eslint --ext .js --format=pretty ./src "
+    "eslint": "eslint --fix --ext .js --format=pretty ./src "
   },
   "lint-staged": {
-    "*.js": "eslint --ext .js --format=pretty ./src "
+    "*.js": [
+      "npm run prettier",
+      "npm run eslint"
+    ]
   },
   "husky": {
     "hooks": {
