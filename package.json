@@ -10,6 +10,14 @@
     "prettier": "prettier --write .",
     "eslint": "eslint --fix --ext .js --format=pretty ./src "
   },
+  "lint-staged": {
+    "*.js": "yarn eslint "
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -23,8 +31,10 @@
     "eslint-formatter-pretty": "^4.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^7.0.4",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
+    "lint-staged": "^12.3.7",
     "mini-css-extract-plugin": "^2.2.0",
     "node-sass": "^7.0.1",
     "postcss-loader": "^6.1.1",
