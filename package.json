@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./build/webpack.config.js",
     "dev": "webpack serve --config ./build/webpack.config.js",
@@ -11,7 +12,7 @@
     "eslint": "eslint --fix --ext .js --format=pretty ./src "
   },
   "lint-staged": {
-    "*.js": "yarn eslint "
+    "*.js": "eslint --fix --ext .js --format=pretty ./src "
   },
   "husky": {
     "hooks": {
