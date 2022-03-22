@@ -7,4 +7,4 @@ import '@/assets/style/index.scss'
 console.log(111);
 
 
-console.log(111);
+console.log(111)

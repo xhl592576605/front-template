@@ -12,7 +12,7 @@
     "eslint": "eslint --fix --ext .js --format=pretty ./src "
   },
   "lint-staged": {
-    "*.js": "eslint --fix --ext .js --format=pretty ./src "
+    "*.js": "eslint --ext .js --format=pretty ./src "
   },
   "husky": {
     "hooks": {
