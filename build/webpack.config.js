@@ -1,7 +1,47 @@
 const path = require('path')
+const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+/**
+ * 获取入口文件
+ * @returns
+ */
+const getEntries = () => {
+  const entries = {}
+  glob.sync('./src/pages/**/index.js').forEach((entry) => {
+    const name = entry.split('/')[3]
+    entries[name] = entry
+  })
+  return entries
+}
+
+/**
+ * 获取模板配置文件
+ * @returns
+ */
+const getHtmlPlugins = () => {
+  const entries = getEntries()
+  const plugins = []
+  for (const name in entries) {
+    plugins.push(
+      new HtmlWebpackPlugin({
+        title: name,
+        template: `./src/pages/${name}/index.html`,
+        filename: `./${name}.html`,
+        chunks: [name],
+        inject: true,
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true
+        }
+      })
+    )
+  }
+  return plugins
+}
 
 module.exports = {
   /**
@@ -11,7 +51,7 @@ module.exports = {
    * 3. package.json script 可以设置 --mode=development 打包或启动命令
    * 4. 更多可查阅 https: //webpack.js.org/configuration/mode/#root
    */
-  mode: 'development',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   /**
    * devServer: 开发服务器 https: //webpack.docschina.org/configuration/dev-server/
    * 1. contentBase: 访问打包好的文件夹
@@ -23,18 +63,24 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, '../dist'),
     port: 9000,
-    hot: true
+    hot: true,
+    historyApiFallback: {
+      rewrites: [{ from: /^\/$/, to: '/home.html' }]
+    }
   },
   /**
    * entry: webpack 开始构建包的入口
    * 1. 更多可查阅 https: //webpack.js.org/configuration/entry-context/#entry
    */
-  entry: path.resolve(__dirname, '../src/index.js'),
+  entry: getEntries(),
   /**
    * 为了更容易地追踪错误和警告， JavaScript 提供了 source map 功能， 将编译后的代码映射回原始源代码。
    * https: //www.webpackjs.com/guides/development/
    */
-  devtool: 'inline-source-map',
+  devtool:
+    process.env.NODE_ENV === 'production'
+      ? 'nosources-source-map'
+      : 'source-map',
   /**
    * output: 打包输出配置
    * 1. 更多可查阅 https: //webpack.js.org/configuration/output/
@@ -90,9 +136,7 @@ module.exports = {
    * plugins
    */
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../public/index.html')
-    }),
+    ...getHtmlPlugins(),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[hash:8].css'
