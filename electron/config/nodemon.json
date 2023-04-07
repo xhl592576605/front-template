@@ -1,0 +1,10 @@
+{
+	"watch": ["electron/", "main.ts"],
+	"ignore": [],
+	"ext": "ts,json",
+	"verbose": true,
+	"exec": "npm run electron:dev",
+	"restartable": "hr",
+	"colours": true,
+	"events": {}
+}
