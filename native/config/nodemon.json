@@ -1,5 +1,5 @@
 {
-	"watch": ["electron/", "main.ts"],
+	"watch": ["native/", "main.ts"],
 	"ignore": [],
 	"ext": "ts,json",
 	"verbose": true,

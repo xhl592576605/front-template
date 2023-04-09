@@ -13,8 +13,7 @@
 		"strict": true,
 		"target": "esnext",
 		"esModuleInterop": true,
-		"types": ["node"]
 	},
-	"include": ["main.ts", "electron/global.d.ts", "electron/**/*.ts"],
+	"include": ["main.ts", "native/global.d.ts", "native/**/*.ts"],
 	"exclude": ["node_modules"]
 }
