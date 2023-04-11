@@ -30,7 +30,8 @@
     "build-l-armv7l": "electron-builder -l=deb --armv7l",
     "build-lr-64": "electron-builder -l=rpm --x64",
     "build-lp-64": "electron-builder -l=pacman --x64",
-    "rebuild": "electron-rebuild"
+    "rebuild": "electron-rebuild",
+    "cz": "cz"
   },
   "keywords": [],
   "author": "",
@@ -45,7 +46,9 @@
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
+    "commitizen": "^4.3.0",
     "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
     "electron": "^24.0.0",
     "electron-builder": "^23.6.0",
     "eslint": "^8.37.0",
@@ -59,5 +62,10 @@
     "get-port": "^5.1.1",
     "koa": "^2.14.1",
     "koa-static": "^5.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
