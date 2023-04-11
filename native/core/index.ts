@@ -1,6 +1,6 @@
 import path from 'path'
 import getPort from 'get-port'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import Koa from 'koa'
 import koaServe from 'koa-static'
 import { AppConfig } from '../types/config'
@@ -29,7 +29,9 @@ class Core {
 	createOption() {
 		return {
 			baseDir: path.join(app.getAppPath(), 'native'),
-			homeDir: app.getAppPath(),
+			homeDir: app.isPackaged
+				? path.join(app.getAppPath(), 'out')
+				: app.getAppPath(),
 			appName: app.getName(),
 			userHome: app.getPath('home'),
 			appData: app.getPath('appData'),
@@ -125,6 +127,9 @@ class Core {
 		if (!staticDir) {
 			staticDir = path.join(this.config.homeDir, 'public', 'dist')
 		}
+		dialog.showMessageBox(this.mainWindow!, {
+			message: this.config.homeDir
+		})
 
 		const koaApp = new Koa()
 		koaApp.use(koaServe(staticDir))

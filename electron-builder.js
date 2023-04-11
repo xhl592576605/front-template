@@ -6,7 +6,7 @@ module.exports = {
 		output: 'builder-out'
 	},
 	asar: true,
-	files: ['**/*', '!frontend/', '!logs/', '!electron/'],
+	files: ['**/*', '!frontend/', '!logs/', '!native/',"'!main.ts"],
 	extraResources: {
 		from: './build/extraResources/',
 		to: 'extraResources'

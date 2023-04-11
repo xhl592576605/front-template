@@ -30,7 +30,7 @@ export default (core: Core) => {
 		protocol:'http://',
 		host: 'localhost',
 		port: 7072
-	}
+		}
 
 	return {
 		...config

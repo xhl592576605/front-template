@@ -4,12 +4,14 @@
 	"description": "",
 	"main": "out/main.js",
 	"scripts": {
-		"electron:dev": "tsc && cross-env NODE_ENV=development  electron out/main.js --env=local",
-		"electron:reload": "nodemon --config ./native/config/nodemon.json",
-		"electron:prod": "tsc && cross-env NODE_ENV=prod  electron out/main.js --env=prod",
+		"start": "cross-env NODE_ENV=production && tsc && electron out/main.js",
+		"electron:dev": "cross-env NODE_ENV=development && tsc &&  electron out/main.js",
+		"electron:watch": "nodemon --config ./native/config/nodemon.json",
+		"electron:build": "cross-env NODE_ENV=production && tsc ",
 		"fronted:dev": "cd frontend && npm run dev",
 		"fronted:build": "cd frontend && npm run build",
-		"fronted:copy": "cp -r frontend/dist/ out/public/dist/",
+		"fronted:copy": "mkdir -p out/public/ && cp -r frontend/dist/ out/public/dist/",
+		"build": "npm run fronted:build && npm run  fronted:copy && npm run electron:build",
 		"build-w": "electron-builder -w=nsis --x64",
 		"build-w-32": "electron-builder -w=nsis --ia32",
 		"build-w-64": "electron-builder -w=nsis --x64",
@@ -26,7 +28,8 @@
 		"build-l-arm64": "electron-builder -l=deb --arm64",
 		"build-l-armv7l": "electron-builder -l=deb --armv7l",
 		"build-lr-64": "electron-builder -l=rpm --x64",
-		"build-lp-64": "electron-builder -l=pacman --x64"
+		"build-lp-64": "electron-builder -l=pacman --x64",
+		"rebuild": "electron-rebuild"
 	},
 	"keywords": [],
 	"author": "",
@@ -36,15 +39,18 @@
 		"@types/koa": "^2.13.6",
 		"@types/koa-static": "^4.0.2",
 		"@types/node": "^18.15.11",
+		"@electron/rebuild": "^3.2.9",
 		"cross-env": "^7.0.3",
 		"electron": "^24.0.0",
 		"electron-builder": "^23.6.0",
 		"eslint": "^8.37.0",
 		"eslint-plugin-prettier": "^4.2.1",
-		"get-port": "^5.1.1",
-		"koa": "^2.14.1",
-		"koa-static": "^5.0.0",
 		"nodemon": "^2.0.22",
 		"typescript": "^5.0.3"
+	},
+	"dependencies": {
+		"get-port": "^5.1.1",
+		"koa": "^2.14.1",
+		"koa-static": "^5.0.0"
 	}
 }
