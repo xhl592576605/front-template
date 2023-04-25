@@ -5,7 +5,7 @@ const basePath = process.cwd()
 const buildWin = () => {
   return new Promise((resolve, reject) => {
     shell.exec(
-      `electron-builder -w=nsis --x64 --ia32 --arm64--config ./script/build/config/window.js `,
+      `electron-builder -w=nsis --x64 --ia32 --arm64 --config ./script/build/config/window.js `,
       (code) => {
         if (code !== 0) {
           reject('打包win失败')
@@ -19,7 +19,7 @@ const buildWin = () => {
 const buildMac = () => {
   return new Promise((resolve, reject) => {
     shell.exec(
-      `electron-builder -m --x64 --ia32 --arm64 --config ./script/build/config/mac.js `,
+      `electron-builder -m --x64 --arm64 --config ./script/build/config/mac.js `,
       (code) => {
         if (code !== 0) {
           reject('打包mac失败')
