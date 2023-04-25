@@ -36,7 +36,7 @@ const buildMac = () => {
 const buildLinux = () => {
   return new Promise((resolve, reject) => {
     log.info('开始打包electron-linux')
-    const exceStr = `electron-builder -l=deb --x64 --ia32 --arm64 --armv7l --config ./script/build/config/linux.js `
+    const exceStr = `electron-builder -l=deb --x64 --arm64 --armv7l --config ./script/build/config/linux.js `
     log.info(`exceStr:${exceStr}`)
     shell.exec(exceStr, (code) => {
       if (code !== 0) {
