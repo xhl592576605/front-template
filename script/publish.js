@@ -12,7 +12,7 @@ const checkBranchMaster = () => {
     shell.cd(basePath)
     let branch = shell.exec('git branch | grep "*"', { silent: true }).stdout
     branch = branch.replace('*', '').trim()
-    // fixme 临时处理成electron-senior 后续要改成electron-senior
+    // todo 临时处理成electron-senior 后续要改成electron-senior
     if (branch !== 'electron-senior') {
       reject('不是处于master分支')
       return
@@ -20,7 +20,7 @@ const checkBranchMaster = () => {
     log.info(`${branch}: 拉取最新代码`)
     shell.exec(`git pull origin ${branch}`)
 
-    // fixme 临时处理成 注释文档
+    // todo 临时处理成 注释文档
     // const statusLength =
     //   shell.exec('git status -s').stdout.split('\n').length - 1
     // if (statusLength > 0) {
@@ -117,7 +117,7 @@ const createTag = ({ branch, tag }) => {
   return new Promise((resolve, reject) => {
     inquirer
       .prompt({
-        type: 'input', // 'editor',
+        type: 'input',
         name: 'context',
         message: '请输入版本发布的内容',
         validate: (context) => {
@@ -180,7 +180,7 @@ const buildSoft = ({ tag }) => {
     }
     try {
       log.info('build electron ')
-      buildElectron()
+      buildElectron(tag)
         .then(() => resolve(tag))
         .catch((err) => {
           deleteTag(tag).then(() => {
