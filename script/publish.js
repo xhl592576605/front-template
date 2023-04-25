@@ -52,7 +52,7 @@ const updateTags = ({ branch, lastTag }) => {
             return 'tag must required'
           }
           if (tag === lastTag) {
-            return '请往上叠加tag，小版本尾号加一，中版本，中号加一'
+            return 'tag已存在，请往上叠加tag，小版本尾号加一，中版本，中号加一'
           }
           return true
         }

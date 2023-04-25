@@ -15,7 +15,7 @@
     "build": "npm run fronted:build && npm run  fronted:copy && npm run electron:build",
     "publish-build-pre": "npm run fronted:build && npm run  fronted:copy",
     "ev-publish-build": "node ./script/publish.js",
-    "build-w": "electron-builder -w=nsis --x64",
+    "build-w": "electron-builder -w=nsis --x64 --ia32",
     "build-w-32": "electron-builder -w=nsis --ia32",
     "build-w-64": "electron-builder -w=nsis --x64",
     "build-w-arm64": "electron-builder -w=nsis --arm64",
