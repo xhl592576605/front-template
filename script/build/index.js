@@ -10,6 +10,7 @@ module.exports = () => {
       .build({
         targets: builder.Platform.WINDOWS.createTarget(),
         x64: true,
+        win: ['nsis'],
         config: builderConfig
       })
       .then(() => {
