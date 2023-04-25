@@ -8,7 +8,6 @@ module.exports = () => {
     // 使用electron-builder打包
     builder
       .build({
-        targets: builder.Platform.WINDOWS.createTarget(),
         x64: true,
         win: ['nsis'],
         config: builderConfig
