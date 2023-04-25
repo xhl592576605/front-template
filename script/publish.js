@@ -196,7 +196,7 @@ const buildSoft = ({ tag }) => {
 const backToMaster = () => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    shell.exec('git checkout master')
+    shell.exec('git checkout electron-senior')
     setTimeout(resolve, 1000)
   })
 }
@@ -220,8 +220,8 @@ const main = () => {
     .then(addCodeAndPush)
     .then(createTag)
     .then(buildSoft)
-    // .then(pushTag)
-    // .then(backToMaster)
+    .then(pushTag)
+    .then(backToMaster)
     .catch((err) => {
       log.error(`错误:${err}`)
     })
