@@ -1,54 +1,15 @@
+const baseInfo = require('./base')
+
 module.exports = {
-  productName: 'hans',
-  appId: 'com.electron.hans',
-  copyright: 'HANS',
-  directories: {
-    output: 'builder-out'
-  },
-  asar: true,
-  files: ['**/*', '!frontend/', '!logs/', '!native/', "'!main.ts"],
-  extraResources: {
-    from: './build/extraResources/',
-    to: 'extraResources'
-  },
-  electronDownload: {
-    mirror: 'https://npmmirror.com/mirrors/electron/'
-  },
-  nsis: {
-    oneClick: false,
-    allowElevation: true,
-    allowToChangeInstallationDirectory: true,
-    installerIcon: './build/icons/icon.ico',
-    uninstallerIcon: './build/icons/icon.ico',
-    installerHeaderIcon: './build/icons/icon.ico',
-    createDesktopShortcut: true,
-    createStartMenuShortcut: true,
-    shortcutName: 'HANS'
-  },
-  publish: [
-    {
-      provider: 'generic',
-      url: 'https://baidu.com/'
-    }
-  ],
+  ...baseInfo,
   mac: {
+    electronLanguages: ['zh_CN', 'en'],
     icon: './build/icons/icon.icns',
     artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['dmg', 'zip']
-  },
-  win: {
-    icon: './build/icons/icon.ico',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: [
-      {
-        target: 'nsis'
-      }
-    ]
-  },
-  linux: {
-    icon: './build/icons/icon.icns',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['deb'],
-    category: 'Utility'
+    target: ['dmg', 'zip'],
+    extendInfo: {
+      NSMicrophoneUsageDescription: '请允许本程序访问您的麦克风',
+      NSCameraUsageDescription: '请允许本程序访问您的摄像头'
+    }
   }
 }

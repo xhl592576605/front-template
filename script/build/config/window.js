@@ -1,19 +1,6 @@
+const baseInfo = require('./base')
 module.exports = {
-  productName: 'hans',
-  appId: 'com.electron.hans',
-  copyright: 'HANS',
-  directories: {
-    output: 'builder-out'
-  },
-  asar: true,
-  files: ['**/*', '!frontend/', '!logs/', '!native/', "'!main.ts"],
-  extraResources: {
-    from: './build/extraResources/',
-    to: 'extraResources'
-  },
-  electronDownload: {
-    mirror: 'https://npmmirror.com/mirrors/electron/'
-  },
+  ...baseInfo,
   nsis: {
     oneClick: false,
     allowElevation: true,
@@ -25,17 +12,6 @@ module.exports = {
     createStartMenuShortcut: true,
     shortcutName: 'HANS'
   },
-  publish: [
-    {
-      provider: 'generic',
-      url: 'https://baidu.com/'
-    }
-  ],
-  mac: {
-    icon: './build/icons/icon.icns',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['dmg', 'zip']
-  },
   win: {
     icon: './build/icons/icon.ico',
     artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
@@ -44,11 +20,5 @@ module.exports = {
         target: 'nsis'
       }
     ]
-  },
-  linux: {
-    icon: './build/icons/icon.icns',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['deb'],
-    category: 'Utility'
   }
 }

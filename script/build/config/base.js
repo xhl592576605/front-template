@@ -1,12 +1,14 @@
+const { version } = require('../../../package.json')
+
 module.exports = {
   productName: 'hans',
   appId: 'com.electron.hans',
-  copyright: 'HANS',
+  copyright: 'Copyright © 2011-' + new Date().getFullYear() + ' HANS',
   directories: {
-    output: 'builder-out'
+    output: `builder-out/${version}/${process.platform}`
   },
-  asar: true,
-  files: ['**/*', '!frontend/', '!logs/', '!native/', "'!main.ts"],
+  asar: false,
+  files: ['**/*', '!frontend/', '!logs/**/*', '!frontend/**/*', ''],
   extraResources: {
     from: './build/extraResources/',
     to: 'extraResources'
@@ -30,25 +32,5 @@ module.exports = {
       provider: 'generic',
       url: 'https://baidu.com/'
     }
-  ],
-  mac: {
-    icon: './build/icons/icon.icns',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['dmg', 'zip']
-  },
-  win: {
-    icon: './build/icons/icon.ico',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: [
-      {
-        target: 'nsis'
-      }
-    ]
-  },
-  linux: {
-    icon: './build/icons/icon.icns',
-    artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
-    target: ['deb'],
-    category: 'Utility'
-  }
+  ]
 }
