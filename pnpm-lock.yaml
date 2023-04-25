@@ -55,8 +55,8 @@ devDependencies:
     specifier: ^3.3.0
     version: 3.3.0
   electron:
-    specifier: ^24.0.0
-    version: 24.0.0
+    specifier: ^22.3.6
+    version: 22.3.6
   electron-builder:
     specifier: ^23.6.0
     version: 23.6.0
@@ -579,7 +579,7 @@ packages:
     resolution: {integrity: sha512-MOCVyzIwkBEloreoCVrTV108vSf8fFIJPsGruLCoAoBZdxtnJUqKA4lNonf/2u1twSjAspPEfmEheC+TLm/cMw==}
     deprecated: This is a stub types definition for electron (https://github.com/electron/electron). electron provides its own type definitions, so you don't need @types/electron installed!
     dependencies:
-      electron: 24.0.0
+      electron: 22.3.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -689,6 +689,10 @@ packages:
 
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
+    dev: true
+
+  /@types/node@16.18.24:
+    resolution: {integrity: sha512-zvSN2Esek1aeLdKDYuntKAYjti9Z2oT4I8bfkLLhIxHlv3dwZ5vvATxOc31820iYm4hQRCwjUgDpwSMFjfTUnw==}
     dev: true
 
   /@types/node@18.15.11:
@@ -1940,14 +1944,14 @@ packages:
       - supports-color
     dev: true
 
-  /electron@24.0.0:
-    resolution: {integrity: sha512-QmL8L53fQ+xOAp8m2mSGNewhDvJqQttCxrcesf0cqndKQDsIq4QvR35wGJqHg7MyPQKcBErLhZj9QvRheO5qnA==}
+  /electron@22.3.6:
+    resolution: {integrity: sha512-/1/DivFHH5AWa/uOuqpkeg12/jjicjkBU8kYv70oeqRFwXzoyuJhgwlzER4jZXnbGjF5Nxz9900oXq/QzAViAw==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@electron/get': 2.0.2
-      '@types/node': 18.15.11
+      '@types/node': 16.18.24
       extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
