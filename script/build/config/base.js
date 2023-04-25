@@ -8,7 +8,15 @@ module.exports = {
     output: `builder-out/${version}/${process.platform}`
   },
   asar: false,
-  files: ['**/*', '!frontend/', '!logs/**/*', '!frontend/**/*', ''],
+  files: [
+    '**/*',
+    '!frontend/',
+    '!logs/**/*',
+    '!frontend/**/*',
+    '!builder-out/**/*',
+    '!.husky/**/*',
+    '!script/**/*'
+  ],
   extraResources: {
     from: './build/extraResources/',
     to: 'extraResources'
