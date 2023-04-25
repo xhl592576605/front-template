@@ -15,7 +15,8 @@ module.exports = {
     '!frontend/**/*',
     '!builder-out/**/*',
     '!.husky/**/*',
-    '!script/**/*'
+    '!script/**/*',
+    'public/**/*'
   ],
   extraResources: {
     from: './build/extraResources/',
