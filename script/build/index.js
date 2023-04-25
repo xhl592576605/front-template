@@ -22,7 +22,7 @@ const buildMac = () => {
       `electron-builder -m --x64 --ia32 --arm64 --config ./script/build/config/mac.js `,
       (code) => {
         if (code !== 0) {
-          reject('打包win失败')
+          reject('打包mac失败')
           return
         }
         resolve()
@@ -37,7 +37,7 @@ const buildLinux = () => {
       `electron-builder -l=deb --x64 --ia32 --arm64 --armv7l --config ./script/build/config/linux.js `,
       (code) => {
         if (code !== 0) {
-          reject('打包win失败')
+          reject('打包linux失败')
           return
         }
         resolve()
