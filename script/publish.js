@@ -1,25 +1,11 @@
 const path = require('path')
 const shell = require('shelljs')
 const fsExtra = require('fs-extra')
-const { blue, green, red, yellow } = require('chalk')
 const inquirer = require('inquirer')
+const log = require('./log')
+const buildElectron = require('./build')
 
 const basePath = process.cwd()
-
-const log = {
-  info: (msg) => {
-    console.log(blue(msg))
-  },
-  success: (msg) => {
-    console.log(green(msg))
-  },
-  warn: (msg) => {
-    console.log(yellow(msg))
-  },
-  error: (msg) => {
-    console.log(red(msg))
-  }
-}
 
 const checkBranchMaster = () => {
   return new Promise((resolve, reject) => {
@@ -184,7 +170,7 @@ const deleteTag = (tag) => {
   })
 }
 
-const buildElectron = ({ tag }) => {
+const buildSoft = ({ tag }) => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
     const checkOutCode = shell.exec(`git checkout ${tag}`).code
@@ -193,8 +179,14 @@ const buildElectron = ({ tag }) => {
       return
     }
     try {
-      log.info(`build electron `)
-      resolve()
+      log.info('build electron ')
+      buildElectron()
+        .then(() => resolve(tag))
+        .catch((err) => {
+          deleteTag(tag).then(() => {
+            reject('build electron failed: ' + err.message)
+          })
+        })
     } catch (e) {
       reject('更新包的版本号失败')
     }
@@ -227,7 +219,7 @@ const main = () => {
     .then(compileCode)
     .then(addCodeAndPush)
     .then(createTag)
-    .then(buildElectron)
+    .then(buildSoft)
     // .then(pushTag)
     // .then(backToMaster)
     .catch((err) => {
