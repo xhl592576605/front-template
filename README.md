@@ -2,6 +2,13 @@
 一个将electron原生与网页分开的electron框架
 > 拷贝该项目，需要自行替换打包配置文件内容，与打包资源文件夹的内容
 
+# 软件使用pnpm作为包源管理
+- 官网：https://pnpm.io/zh/motivation
+- 安装
+    ``` bash
+    npm install -g pnpm
+    ```
+
 ## 目录
 ``` bash
 ├── README.md # 说明
@@ -75,8 +82,34 @@
     "build-l-armv7l": "electron-builder -l=deb --armv7l --config ./script/build/config/linux.js ",
     "build-lr-64": "electron-builder -l=rpm --x64 --config ./script/build/config/linux.js ",
     "build-lp-64": "electron-builder -l=pacman --x64 --config ./script/build/config/linux.js ",
-    # 重新根据当前node，编译electronNode
-    "rebuild": "electron-rebuild",
     # 执行该命令，会进行提交代码操作，但是会有一定的引导规则，会保证提交的日志规范
-    "cz": "cz"
+    "cz": "cz",
+    # 安装依赖时，重新根据当前node，编译electronNode
+    "postinstall": "electron-builder install-app-deps"
+
 ```
+
+# commit 规范
+
+## 建议使用script的cz命令来commit代码
+``` bash
+ # 执行该命令，会进行提交代码操作，但是会有一定的引导规则，会保证提交的日志规范
+    "cz": "cz",
+```
+## 类型
+
+| 类型     | 含义                                                                         |
+| -------- | ---------------------------------------------------------------------------- |
+| feature  | 特性                                                                         |
+| refactor | 重构                                                                         |
+| type     | 修复类型错误                                                                 |
+| fix      | 修复,产生 diff 并自动修复此问题                                              |
+| to       | 修复,只产生 diff 不自动修复此问题,适合于多次提交。最终修复问题提交时使用 fix |
+| doc      | 文档                                                                         |
+| test     | 单元测试                                                                     |
+| example  | 例子                                                                         |
+| chore    | 构建过程或辅助工具的变动                                                     |
+| typo     | 修改错别字                                                                   |
+| perf     | 优化相关，比如提升性能、体验。                                               |
+| remove   | 移除代码                                                                     |
+| release   | 移除代码                                                                     |
