@@ -1,166 +1,107 @@
 import path from 'path'
-import getPort from 'get-port'
-import { app, BrowserWindow, dialog } from 'electron'
-import Koa from 'koa'
-import koaServe from 'koa-static'
-import { AppConfig } from '../types/config'
-import createDefaultConfig from '../config/config.default'
-import MainWindow from '../main-window'
-import assert from 'assert'
-import fs from 'fs'
-import https from 'https'
+import { app } from 'electron'
+import debug from 'debug'
+import merge from 'lodash/merge'
+import { CoreOptions, CorePlugin, Options } from '../types/core-options'
+import Hooks from './hooks'
 
 class Core {
-  config: AppConfig
-  option: Record<string, any>
-  mainWindow: BrowserWindow | undefined
+  private debug = debug('core')
+  public options: CoreOptions | undefined
+  public hooks: Hooks
+
   constructor() {
-    this.option = this.createOption()
-    this.config = createDefaultConfig(this)
-
-    this.initialize()
-  }
-
-  initialize() {
-    return Promise.resolve()
-      .then(() => this.createPorts())
-      .then(() => this.createElectronApp())
-  }
-  createOption() {
-    return {
-      baseDir: path.join(app.getAppPath(), 'native'),
-      homeDir: app.isPackaged
-        ? path.join(app.getAppPath(), 'out')
-        : app.getAppPath(),
-      appName: app.getName(),
-      userHome: app.getPath('home'),
-      appData: app.getPath('appData'),
-      appUserData: app.getPath('userData'),
-      appVersion: app.getVersion(),
-      isPackaged: app.isPackaged,
-      execDir: app.getAppPath()
-    }
-  }
-
-  createPorts() {
-    return new Promise((resolve, reject) => {
-      getPort({ port: this.config.mainServer?.port })
-        .then((mainPort) => {
-          this.config.mainServer!.port = mainPort
-        })
-        .then(resolve)
-        .catch(reject)
-    })
-  }
-
-  createElectronApp() {
-    return new Promise<void>(() => {
-      const gotTheLock = app.requestSingleInstanceLock()
-      if (!gotTheLock) {
-        app.quit()
-        return
-      }
-      app.whenReady().then(() => {
-        this.createWindow()
-      })
-
-      app.on('window-all-closed', () => {
-        if (process.platform !== 'darwin') {
-          app.quit()
-        }
-      })
-    })
-  }
-
-  createWindow() {
-    this.mainWindow = MainWindow.getMainWindow()
-    this.selectAppType()
+    /**
+     * 1. 初始化内部参数
+     * 2. 初始化hooks
+     */
+    this.initOptions()
+    this.hooks = new Hooks()
   }
 
   /**
-   * 应用类型 （远程、html、单页应用）
+   * 运行应用
    */
-  selectAppType() {
-    let type = ''
-    let url = ''
+  public init(options?: Options) {
+    /**
+     * 1. 应用hooks
+     * 2. 合并内部option
+     * 3. 初始化配置
+     * 4. 开始走流程
+     */
+    this.usePlugin(this.options?.plugins || [])
+    this.mergeOption(options)
+    return this
+  }
 
-    // 远程模式
-    const remoteConfig = this.config.remoteUrl
-    if (remoteConfig?.enable == true) {
-      type = 'remote_web'
-      url = remoteConfig.url
-      this.loadMainUrl(type, url)
-      return
+  /**
+   * 使用插件
+   * @param plugins
+   */
+  public usePlugin(plugins: CorePlugin | CorePlugin[]) {
+    if (!Array.isArray(plugins)) {
+      plugins = [plugins]
     }
-
-    const developmentModeConfig = this.config.developmentMode
-    const selectMode = developmentModeConfig.default
-    const modeInfo = developmentModeConfig.mode[selectMode]
-    let staticDir = undefined
-
-    // html模式
-    if (selectMode == 'html') {
-      if (process.env.NODE_ENV === 'development') {
-        staticDir = path.join(this.config.homeDir, 'frontend', 'dist')
+    plugins.forEach((plugin) => {
+      if (!plugin.name || !(typeof plugin.apply === 'function')) {
+        this.debug('no standard plugin', plugin.constructor)
+        return
       }
-      this.loadLocalWeb('html', staticDir, modeInfo)
-      return
-    }
-
-    // 单页应用
-    const protocol = modeInfo.protocol || 'http://'
-    url = protocol + modeInfo.hostname + ':' + modeInfo.port
-    if (process.env.NODE_ENV === 'development') {
-      this.loadMainUrl('spa', url)
-    } else {
-      this.loadLocalWeb('spa')
-    }
-  }
-
-  loadMainUrl(type: string, url: string) {
-    const mainServer = this.config.mainServer
-
-    this.mainWindow!.loadURL(url, mainServer!.options || {})
-  }
-
-  loadLocalWeb(mode: string, staticDir?: string, hostInfo?: any) {
-    if (!staticDir) {
-      staticDir = path.join(this.config.homeDir, 'public', 'dist')
-    }
-    dialog.showMessageBox(this.mainWindow!, {
-      message: this.config.homeDir
+      plugin.apply(this)
     })
+    return this
+  }
 
-    const koaApp = new Koa()
-    koaApp.use(koaServe(staticDir))
-
-    const mainServer = this.config.mainServer!
-    let url = mainServer.protocol + mainServer.host + ':' + mainServer.port
-    if (mode == 'html') {
-      url += '/' + hostInfo.indexPage
+  /**
+   * 初始化参数
+   */
+  private initOptions() {
+    const { env, platform, arch } = process
+    const options: CoreOptions = {
+      env: env.NODE_ENV || 'production',
+      platform,
+      arch,
+      baseDir: path.join(app.getAppPath(), 'native'),
+      homeDir: app.getAppPath(),
+      appName: app.getName(),
+      appVersion: app.getVersion(),
+      userHome: app.getPath('home'),
+      appData: app.getPath('appData'),
+      appUserData: app.getPath('userData'),
+      temp: app.getPath('temp'),
+      logs: app.getPath('logs'),
+      crashDumps: app.getPath('crashDumps'),
+      isPackaged: app.isPackaged,
+      execDir: app.getAppPath()
     }
-
-    const isHttps = mainServer.protocol == 'https://' ? true : false
-    if (isHttps) {
-      const keyFile = path.join(this.config.homeDir, mainServer.ssl!.key)
-      const certFile = path.join(this.config.homeDir, mainServer.ssl!.cert)
-      assert(fs.existsSync(keyFile), 'ssl key file is required')
-      assert(fs.existsSync(certFile), 'ssl cert file is required')
-
-      const sslOpt = {
-        key: fs.readFileSync(keyFile),
-        cert: fs.readFileSync(certFile)
-      }
-      https
-        .createServer(sslOpt, koaApp.callback())
-        .listen(mainServer.port, () => {
-          this.loadMainUrl(mode, url)
-        })
-    } else {
-      koaApp.listen(mainServer.port, () => {
-        this.loadMainUrl(mode, url)
-      })
+    if (options.env == 'production' && app.isPackaged) {
+      options.execDir = path.dirname(app.getPath('exe'))
     }
+    this.options = options
+  }
+
+  /**
+   *  合并option
+   * @param outOptions 外部option
+   */
+  private mergeOption(outOptions?: Options) {
+    const options = this.options!
+    if (outOptions) {
+      outOptions = this.hooks.beforeMergeOption.call(outOptions)
+      merge(options, outOptions)
+    }
+    const { env } = process
+    env.NODE_ENV = options.env
+    this.debug('options:%j', this.options)
+  }
+
+  /**
+   * 初始化配置
+   */
+  private initConfig() {
+    /**
+     * 1.初始化配置
+     */
   }
 }
 

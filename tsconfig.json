@@ -1,19 +1,19 @@
 {
-	"compilerOptions": {
-		"baseUrl": ".",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"noImplicitAny": true,
-		"outDir": "out",
-		"paths": {},
-		"removeComments": false,
-		"sourceMap": true,
-		"strict": true,
-		"target": "esnext",
-		"esModuleInterop": true,
-	},
-	"include": ["main.ts", "native/global.d.ts", "native/**/*.ts"],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "out",
+    "paths": {},
+    "removeComments": false,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "esModuleInterop": true
+  },
+  "include": ["native/global.d.ts", "native/**/*.ts", "main.ts"],
+  "exclude": ["node_modules"]
 }

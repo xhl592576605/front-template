@@ -1,2 +1,2 @@
 import Core from './core'
-export { Core }
+new Core().init()

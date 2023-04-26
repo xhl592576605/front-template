@@ -7,7 +7,7 @@ module.exports = {
   directories: {
     output: `builder-out/${version}/${process.platform}`
   },
-  asar: true,
+  asar: false,
   files: [
     '**/*',
     '!frontend/',
