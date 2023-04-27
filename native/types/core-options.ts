@@ -1,10 +1,10 @@
-import Core from '../core'
+import { CorePlugin } from '../plugins/core-plugin'
 
 /**
  * core option
  */
 export interface CoreOptions extends Options {
-  env: string
+  env: 'development' | 'production' | 'test' | 'local'
   platform: Platform
   arch: Architecture
   baseDir: string
@@ -48,8 +48,3 @@ type Architecture =
   | 's390'
   | 's390x'
   | 'x64'
-
-export abstract class CorePlugin {
-  abstract name: string
-  abstract apply: ($core: Core) => void
-}

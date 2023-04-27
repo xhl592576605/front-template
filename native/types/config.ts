@@ -1,7 +1,10 @@
 import { LoadURLOptions } from 'electron'
 
-export type AppConfig = {
-  homeDir: string
+/**
+ * 应用配置
+ */
+export type ApplicationConfig = {
+  env: 'devp' | 'test' | 'pre' | 'prod'
   developmentMode: {
     default: DevelopmentMode
     mode: {

@@ -1,13 +1,22 @@
 import path from 'path'
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import debug from 'debug'
 import merge from 'lodash/merge'
-import { CoreOptions, CorePlugin, Options } from '../types/core-options'
+import { ApplicationConfig } from '../types/config'
+import { CoreOptions, Options } from '../types/core-options'
+import CorePlugins, { CorePlugin } from '../plugins'
 import Hooks from './hooks'
 
 class Core {
+  /**
+   * 定义一些虚拟方法，在对应的插件进行实现
+   */
+  declare config: ApplicationConfig
+  declare getConfigFilePath: () => string
+  declare updateConfigFile: () => void
+
   private debug = debug('core')
-  public options: CoreOptions | undefined
+  public options!: CoreOptions
   public hooks: Hooks
 
   constructor() {
@@ -17,12 +26,13 @@ class Core {
      */
     this.initOptions()
     this.hooks = new Hooks()
+    app.commandLine.appendSwitch('remote-debugging-port=port', '9090')
   }
 
   /**
    * 运行应用
    */
-  public init(options?: Options) {
+  public async init(options?: Options) {
     /**
      * 1. 应用hooks
      * 2. 合并内部option
@@ -31,6 +41,19 @@ class Core {
      */
     this.usePlugin(this.options?.plugins || [])
     this.mergeOption(options)
+
+    // 初始化配置
+    this.hooks.beforeGetConfig.call(this)
+    await this.hooks.awaitGetConfig.promise(this)
+    this.hooks.afterGetConfig.call(this)
+
+    // 初始化logger
+    this.hooks.beforeInitLogger.call(this)
+    await this.hooks.awaitInitLogger.promise(this)
+    this.hooks.afterInitLogger.call(this)
+
+    // 初始化应用
+
     return this
   }
 
@@ -58,7 +81,7 @@ class Core {
   private initOptions() {
     const { env, platform, arch } = process
     const options: CoreOptions = {
-      env: env.NODE_ENV || 'production',
+      env: (env.NODE_ENV as any) || 'production',
       platform,
       arch,
       baseDir: path.join(app.getAppPath(), 'native'),
@@ -72,7 +95,8 @@ class Core {
       logs: app.getPath('logs'),
       crashDumps: app.getPath('crashDumps'),
       isPackaged: app.isPackaged,
-      execDir: app.getAppPath()
+      execDir: app.getAppPath(),
+      plugins: CorePlugins
     }
     if (options.env == 'production' && app.isPackaged) {
       options.execDir = path.dirname(app.getPath('exe'))
@@ -93,6 +117,12 @@ class Core {
     const { env } = process
     env.NODE_ENV = options.env
     this.debug('options:%j', this.options)
+    app.whenReady().then(() => {
+      dialog.showMessageBox({
+        title: '111',
+        message: JSON.stringify(this.options, null, 2)
+      })
+    })
   }
 
   /**

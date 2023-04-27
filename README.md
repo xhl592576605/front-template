@@ -43,25 +43,25 @@
 ## 编译脚本说明
 ```bash
     # 以正式环境，运行electron
-    "start": "cross-env NODE_ENV=production && tsc && electron out/main.js",
+    "start": "tsc && cross-env NODE_ENV=production  electron out/main.js",
     # 以开发环境，运行electron
-    "electron:dev": "cross-env NODE_ENV=development && tsc &&  electron out/main.js",
+    "electron:dev": " tsc && cross-env DEBUG=* NODE_ENV=development electron out/main.js --trace-warnings",
     # 以开发环境，运行electron，并监听文件
     "electron:watch": "nodemon --config ./native/config/nodemon.json",
     # 以正式环境，编译electron-ts文件
-    "electron:build": "cross-env NODE_ENV=production && tsc ",
+    "electron:build": "cross-env NODE_ENV=production tsc ",
     # 运行前端页面
     "fronted:dev": "cd frontend && npm run dev",
     # 编译前端页面
     "fronted:build": "cd frontend && npm run build",
     # 拷贝前端页面dist到electron打包文件夹
-    "fronted:copy": "mkdir -p out/public/ && cp -r frontend/dist/ out/public/dist/",
+    "fronted:copy": "node ./script/frontend-copy.js",
     # 检验代码
     "lint": "eslint native/**/ --ext .vue,.js,.ts,.jsx,.tsx --fix",
     # 编译整个electron应用的代码
-    "build": "npm run fronted:build && npm run  fronted:copy && npm run electron:build",
+    "build": "npm run fronted:build && npm run electron:build && npm run  fronted:copy ",
     # 打包electron应用的准备工作
-    "publish-build-pre": "npm run fronted:build && npm run  fronted:copy",
+    "publish-build-pre": "npm run build",
     # 打包electron，会有tag创建等操作，建议正式发布使用这个命令
     "ev-publish-build": "node ./script/publish.js",
     # 剩下的都是各类平台，版本的打包脚本

@@ -17,7 +17,7 @@
     "fronted:copy": "node ./script/frontend-copy.js",
     "lint": "eslint native/**/* --ext .vue,.js,.ts,.jsx,.tsx --fix",
     "build": "npm run fronted:build && npm run electron:build && npm run  fronted:copy ",
-    "publish-build-pre": "npm run build",
+    "publish-build-pre": "rm -rf ./out/ && npm run build",
     "ev-publish-build": "node ./script/publish.js",
     "build-w": "electron-builder -w=nsis --x64 --config ./script/build/config/window.js ",
     "build-w-32": "electron-builder -w=nsis --ia32 --config ./script/build/config/window.js ",
@@ -73,11 +73,14 @@
   },
   "dependencies": {
     "debug": "^4.3.3",
+    "electron-log": "^4.4.8",
     "get-port": "^5.1.1",
+    "is-type-of": "^1.2.1",
     "koa": "^2.14.1",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
-    "tapable": "^2.2.1"
+    "tapable": "^2.2.1",
+    "yaml": "^2.2.2"
   },
   "config": {
     "commitizen": {
