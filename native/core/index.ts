@@ -1,5 +1,5 @@
 import path from 'path'
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import debug from 'debug'
 import merge from 'lodash/merge'
 import { ApplicationConfig } from '../types/config'
@@ -120,6 +120,12 @@ class Core {
     const { env } = process
     env.NODE_ENV = options.env
     console.log(this.options)
+    app.whenReady().then(() => {
+      dialog.showMessageBoxSync({
+        title: 'options',
+        message: JSON.stringify(this.options, null, 2)
+      })
+    })
     this.debug('options:%j', this.options)
   }
 
