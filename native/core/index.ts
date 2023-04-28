@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, dialog } from 'electron'
+import { app } from 'electron'
 import debug from 'debug'
 import merge from 'lodash/merge'
 import { ApplicationConfig } from '../types/config'
@@ -26,7 +26,6 @@ class Core {
      */
     this.initOptions()
     this.hooks = new Hooks()
-    app.commandLine.appendSwitch('remote-debugging-port=port', '9090')
   }
 
   /**
@@ -84,7 +83,7 @@ class Core {
       env: (env.NODE_ENV as any) || 'production',
       platform,
       arch,
-      baseDir: path.join(app.getAppPath(), 'native'),
+      baseDir: app.getAppPath(),
       homeDir: app.getAppPath(),
       appName: app.getName(),
       appVersion: app.getVersion(),
@@ -98,8 +97,12 @@ class Core {
       execDir: app.getAppPath(),
       plugins: CorePlugins
     }
-    if (options.env == 'production' && app.isPackaged) {
+    if (options.env == 'production' && options.isPackaged) {
       options.execDir = path.dirname(app.getPath('exe'))
+      options.baseDir = path.join(app.getAppPath(), 'out')
+    }
+    if (!options.isPackaged) {
+      options.homeDir = path.join(options.homeDir, '../')
     }
     this.options = options
   }
@@ -116,13 +119,8 @@ class Core {
     }
     const { env } = process
     env.NODE_ENV = options.env
+    console.log(this.options)
     this.debug('options:%j', this.options)
-    app.whenReady().then(() => {
-      dialog.showMessageBox({
-        title: '111',
-        message: JSON.stringify(this.options, null, 2)
-      })
-    })
   }
 
   /**

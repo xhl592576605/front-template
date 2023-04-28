@@ -52,6 +52,7 @@ export default class CoreConfigPlugin implements CorePlugin {
      */
     const getConfigFileConfig = () => {
       const configPath = getConfigFilePath()
+      if (!fs.existsSync(configPath)) return null
       const configStr = fs.readFileSync(configPath, 'utf-8')
       const config = yaml.parse(configStr)
       return config
@@ -62,15 +63,16 @@ export default class CoreConfigPlugin implements CorePlugin {
      * @returns
      */
     const getInnerConfig = () => {
-      const { env, execDir } = $core.options
+      const { env, baseDir } = $core.options
+      // todo: 如何调试 如何让读取app.asar内部文件
 
       // 1. 获取内置默认配置文件
       const defaultConfig =
-        loadModule(path.join(execDir, 'config/config.default.js'), $core) || {}
+        loadModule(path.join(baseDir, 'config/config.default.js'), $core) || {}
 
       // 2. 获取内置环境配置文件
       const envConfig = loadModule(
-        path.join(execDir, `config/config.${env}.js`)
+        path.join(baseDir, `config/config.${env}.js`)
       )
       merge(defaultConfig, envConfig || {})
       return defaultConfig
