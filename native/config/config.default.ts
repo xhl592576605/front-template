@@ -1,6 +1,7 @@
+import Core from '../core'
 import { ApplicationConfig, DevelopmentMode } from '../types/config'
 
-export default () => {
+export default ($core: Core) => {
   const config: ApplicationConfig = {
     env: 'devp',
     developmentMode: {
@@ -18,6 +19,21 @@ export default () => {
           hostname: 'localhost',
           indexPage: 'index.html'
         }
+      }
+    },
+    logger: {
+      dir: $core.options.logs,
+      main: {
+        fileName: 'main.log'
+      },
+      net: {
+        fileName: 'net.log'
+      },
+      renderer: {
+        fileName: 'renderer.log'
+      },
+      webView: {
+        fileName: 'webView.log'
       }
     }
   }

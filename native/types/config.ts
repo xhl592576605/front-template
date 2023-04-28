@@ -30,8 +30,22 @@ export type ApplicationConfig = {
     enable?: boolean
     url: string
   }
+  logger: {
+    dir: string
+    main: LoggerObj
+    net: LoggerObj
+    renderer: LoggerObj
+    webView: LoggerObj
+  }
 }
 
+export type LoggerObj = {
+  fileName: string
+  maxSize?: number
+  level?: string
+  format?: string
+  console?: boolean
+}
 export enum DevelopmentMode {
   vue = 'vue',
   react = 'react',

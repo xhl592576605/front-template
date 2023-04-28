@@ -6,15 +6,9 @@ import { ApplicationConfig } from '../types/config'
 import { CoreOptions, Options } from '../types/core-options'
 import CorePlugins, { CorePlugin } from '../plugins'
 import Hooks from './hooks'
+import BaseCore from './base-core'
 
-class Core {
-  /**
-   * 定义一些虚拟方法，在对应的插件进行实现
-   */
-  declare config: ApplicationConfig
-  declare getConfigFilePath: () => string
-  declare updateConfigFile: () => void
-
+class Core extends BaseCore {
   private debug = debug('core')
   public options!: CoreOptions
   public hooks: Hooks
@@ -24,6 +18,7 @@ class Core {
      * 1. 初始化内部参数
      * 2. 初始化hooks
      */
+    super()
     this.initOptions()
     this.hooks = new Hooks()
   }
@@ -119,6 +114,7 @@ class Core {
     }
     const { env } = process
     env.NODE_ENV = options.env
+    env.ELECTRON_IS_PACKAGED = `${options.isPackaged}`
     this.debug('options:%j', this.options)
   }
 

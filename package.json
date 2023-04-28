@@ -72,6 +72,7 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
+    "dayjs": "^1.11.7",
     "debug": "^4.3.3",
     "electron-log": "^4.4.8",
     "get-port": "^5.1.1",
