@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "tsc && cross-env NODE_ENV=production  electron out/main.js",
-    "electron:dev": " tsc && cross-env DEBUG=* NODE_ENV=development electron out/main.js --trace-warnings",
+    "electron:dev": " tsc && cross-env DEBUG=* NODE_ENV=development electron out/main.js --trace-warnings --inspect-brk",
     "electron:watch": "nodemon --config ./native/config/nodemon.json",
     "electron:build": "cross-env NODE_ENV=production tsc ",
     "fronted:dev": "cd frontend && npm run dev",
