@@ -26,14 +26,15 @@ export default class CoreConfigPlugin implements CorePlugin {
     const CONFIG_FILE_NAME = `.config.${$core.options.appName}.yaml`
 
     /**
-     * 若是用户目录存在配置文件，则使用用户目录的配置文件，否则使用如软件统计目录的配置文件
-     * fixme: 可以应该保证冰点还原的配置路径是正确的
+     * 若是用户目录存在配置文件，则使用用户目录的配置文件，否则使用如软件同级目录的配置文件
+     * fixme: 可以应该保证冰点还原的配置路径是正确的，目前只考虑了window情况
      * @returns 配置文件路径
      */
     const getConfigFilePath = () => {
-      const { userHome, baseDir } = $core.options
-      if (fs.existsSync(path.join(baseDir, CONFIG_FILE_NAME))) {
-        return path.join(baseDir, CONFIG_FILE_NAME)
+      const { userHome, homeDir } = $core.options
+      // fix:测试
+      if (!fs.existsSync(path.join(homeDir, '../', CONFIG_FILE_NAME))) {
+        return path.join(homeDir, '../', CONFIG_FILE_NAME)
       }
       return path.join(userHome, CONFIG_FILE_NAME)
     }
