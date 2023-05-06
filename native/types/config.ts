@@ -1,4 +1,5 @@
 import { LoadURLOptions } from 'electron'
+import { LevelOption } from 'electron-log'
 
 /**
  * 应用配置
@@ -32,20 +33,23 @@ export type ApplicationConfig = {
   }
   logger: {
     dir: string
-    main: LoggerObj
-    net: LoggerObj
-    renderer: LoggerObj
-    webView: LoggerObj
+    log: {
+      main: LoggerOption
+      net: LoggerOption
+      renderer: LoggerOption
+      webView: LoggerOption
+    }
   }
 }
 
-export type LoggerObj = {
+export type LoggerOption = {
   fileName: string
   maxSize?: number
-  level?: string
+  level?: LevelOption
   format?: string
   console?: boolean
 }
+
 export enum DevelopmentMode {
   vue = 'vue',
   react = 'react',

@@ -27,32 +27,36 @@ export default (logId: string, option: CreateLoggerOption) => {
       `logs/${dayjs().format('YYYY-MM-DD')}/${option.fileName}`
     )
   }
-  logger.transports.file.archiveLog = (file) => {
-    const date = new Date()
-    const info = path.parse(file.path)
 
-    try {
-      fs.renameSync(
-        file.path,
-        path.join(
-          info.dir,
-          info.name + `.${dayjs().format('HHmmssSSS')}` + info.ext
-        )
-      )
-    } catch (e) {
-      console.warn('Could not rotate log', e)
-    }
-  }
-  option.archiveLog && (logger.transports.file.archiveLog = option.archiveLog)
+  option.maxSize = option.maxSize || 1024 * 1024 * 10 // 10M
+
+  option.archiveLog
+    ? (logger.transports.file.archiveLog = option.archiveLog)
+    : (logger.transports.file.archiveLog = (file) => {
+        const date = new Date()
+        const info = path.parse(file.path)
+
+        try {
+          fs.renameSync(
+            file.path,
+            path.join(
+              info.dir,
+              info.name + `.${dayjs().format('HHmmssSSS')}` + info.ext
+            )
+          )
+        } catch (e) {
+          console.warn('Could not rotate log', e)
+        }
+      })
 
   option.format
     ? (logger.transports.file.format = option.format)
     : (logger.transports.file.format =
-        '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}')
+        '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}')
   option.level
     ? (logger.transports.file.level = option.level)
     : (logger.transports.file.level = 'debug')
   logger.transports.console.level = option.console ? 'debug' : false
-
+  logger.info(`${logId} logger initialized`)
   return logger
 }

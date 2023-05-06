@@ -42,5 +42,14 @@ export default class BaseCore {
    * @param sumbitUrl 上报地址
    * @param header 请求头
    */
-  declare reportLog: (sumbitUrl: string, header?: Record<string, any>) => void
+  declare reportLog: (
+    sumbitUrl: string,
+    data: Record<string, any>,
+    header?: Record<string, any>,
+    options?: {
+      lastest?: boolean
+      day?: number
+      upload?: boolean
+    },
+  ) => void
 }
