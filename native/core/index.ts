@@ -2,11 +2,11 @@ import path from 'path'
 import { app } from 'electron'
 import debug from 'debug'
 import merge from 'lodash/merge'
-import { ApplicationConfig } from '../types/config'
 import { CoreOptions, Options } from '../types/core-options'
 import CorePlugins, { CorePlugin } from '../plugins'
 import Hooks from './hooks'
 import BaseCore from './base-core'
+import getmac from '../utils/get-mac'
 
 class Core extends BaseCore {
   private debug = debug('core')
@@ -47,6 +47,14 @@ class Core extends BaseCore {
     this.hooks.afterInitLogger.call(this)
 
     // 初始化应用
+    this.hooks.beforeInitApp.call(this)
+    await this.hooks.awaitInitApp.promise(this)
+    this.hooks.afterInitApp.call(this)
+
+    // 初始化窗口
+    this.hooks.beforeCreateMainWindow.call(this)
+    await this.hooks.awaitCreateMainWindow.promise(this)
+    this.hooks.afterCreateMainWindow.call(this)
 
     return this
   }
@@ -74,10 +82,13 @@ class Core extends BaseCore {
    */
   private initOptions() {
     const { env, platform, arch } = process
+    const { mac, address: ip } = getmac()
     const options: CoreOptions = {
       env: (env.NODE_ENV as any) || 'production',
       platform,
       arch,
+      mac,
+      ip,
       baseDir: app.getAppPath(),
       homeDir: app.getAppPath(),
       appName: app.getName(),

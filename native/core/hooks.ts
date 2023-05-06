@@ -16,6 +16,16 @@ export default class Hooks {
   awaitInitLogger: AsyncSeriesHook<Core>
   afterInitLogger: SyncHook<Core>
 
+  // 初始化应用
+  beforeInitApp: SyncHook<Core>
+  awaitInitApp: AsyncSeriesHook<Core>
+  afterInitApp: SyncHook<Core>
+
+  // 初始化窗口
+  beforeCreateMainWindow: SyncHook<Core>
+  awaitCreateMainWindow: AsyncSeriesHook<Core>
+  afterCreateMainWindow: SyncHook<Core>
+
   constructor() {
     this.beforeMergeOption = new SyncWaterfallHook(['option'])
 
@@ -26,5 +36,13 @@ export default class Hooks {
     this.beforeInitLogger = new SyncHook(['core'])
     this.awaitInitLogger = new AsyncSeriesHook(['core'])
     this.afterInitLogger = new SyncHook(['core'])
+
+    this.beforeInitApp = new SyncHook(['core'])
+    this.awaitInitApp = new AsyncSeriesHook(['core'])
+    this.afterInitApp = new SyncHook(['core'])
+
+    this.beforeCreateMainWindow = new SyncHook(['core'])
+    this.awaitCreateMainWindow = new AsyncSeriesHook(['core'])
+    this.afterCreateMainWindow = new SyncHook(['core'])
   }
 }

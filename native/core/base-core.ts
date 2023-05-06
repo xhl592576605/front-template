@@ -50,6 +50,8 @@ export default class BaseCore {
       lastest?: boolean
       day?: number
       upload?: boolean
-    },
+    }
   ) => void
+
+  declare quit: () => void
 }

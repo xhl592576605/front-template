@@ -1,8 +1,9 @@
-import path from 'path'
 import fs from 'fs'
 import Core from '../core'
 import { CorePlugin } from './core-plugin'
-import createLogger, { CreateLoggerOption } from '../utils/logger'
+import createLogger from '../utils/logger'
+import * as Exception from '../exception'
+
 export default class CoreLoggerPlugin implements CorePlugin {
   name = 'core-logger-plugin'
 
@@ -35,7 +36,11 @@ export default class CoreLoggerPlugin implements CorePlugin {
             ...value
           })
         })
-        $core.mainLogger.info('$core awaitInitLogger called successfully')
+        $core.mainLogger.info(
+          `$core ${this.name} plugin awaitInitLogger called successfully`
+        )
+        // 在日志模块初始化后，捕获全局异常，写入日志
+        Exception.start($core.mainLogger)
         $core.reportLog = reportLog.bind($core)
       }
     )

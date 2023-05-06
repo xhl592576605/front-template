@@ -43,11 +43,11 @@ export default ($core: Core) => {
       }
     }
   }
-
   config.mainServer = {
     protocol: 'http://',
     host: 'localhost',
-    port: 7072
+    port: 7072,
+    portRange: [7072, 7100]
   }
 
   return config
