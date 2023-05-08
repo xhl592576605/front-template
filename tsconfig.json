@@ -25,7 +25,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "removeComments": false,
-    "suppressImplicitAnyIndexErrors":true,
     "jsx": "preserve",
     "lib": [
       "esnext",

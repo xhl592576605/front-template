@@ -10,7 +10,7 @@ const name = pkg.name
 
 const banner = `/*!
   * ${pkg.name} v${pkg.version}
-  * (c) ${new Date().getFullYear()} brisky-package-template
+  * (c) ${new Date().getFullYear()} package-template
   * @license MIT
   */`
 
