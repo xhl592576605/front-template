@@ -1,12 +1,12 @@
-import path from 'path'
-import { app } from 'electron'
 import debug from 'debug'
+import { app } from 'electron'
 import merge from 'lodash/merge'
-import { CoreOptions, Options } from '../types/core-options'
+import path from 'path'
 import CorePlugins, { CorePlugin } from '../plugins'
-import Hooks from './hooks'
-import BaseCore from './base-core'
+import { CoreOptions, Options } from '../types/core-options'
 import getmac from '../utils/get-mac'
+import BaseCore from './base-core'
+import Hooks from './hooks'
 
 class Core extends BaseCore {
   private debug = debug('core')

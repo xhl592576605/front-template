@@ -1,12 +1,12 @@
+import debug from 'debug'
 import fs from 'fs'
+import merge from 'lodash/merge'
 import path from 'path'
 import yaml from 'yaml'
-import debug from 'debug'
-import merge from 'lodash/merge'
 import Core from '../core'
-import { CorePlugin } from './core-plugin'
 import { ApplicationConfig } from '../types/config'
 import loadModule from '../utils/load-module'
+import { CorePlugin } from './core-plugin'
 /**
  * 配置插件
  * ! 该插件需要最先加载, 以保证其他插件可以使用配置,并且要保证配置路径逻辑都要正确

@@ -1,8 +1,8 @@
-import ElectronLog, { LogFile, LevelOption } from 'electron-log'
-import { isPackaged } from '../ps'
-import path from 'path'
-import fs from 'fs'
 import dayjs from 'dayjs'
+import ElectronLog, { LevelOption, LogFile } from 'electron-log'
+import fs from 'fs'
+import path from 'path'
+import { isPackaged } from '../ps'
 export interface CreateLoggerOption {
   logPath: string
   fileName: string

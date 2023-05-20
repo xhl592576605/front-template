@@ -1,19 +1,19 @@
 import fs from 'fs'
 import Core from '../core'
-import { CorePlugin } from './core-plugin'
-import createLogger from '../utils/logger'
 import * as Exception from '../exception'
+import createLogger from '../utils/logger'
+import { CorePlugin } from './core-plugin'
 
 export default class CoreLoggerPlugin implements CorePlugin {
   name = 'core-logger-plugin'
 
   apply($core: Core) {
     const reportLog = (
-      sumbitUrl: string,
+      submitUrl: string,
       data: Record<string, any>,
       header?: Record<string, any>,
       options?: {
-        lastest?: boolean
+        latest?: boolean
         day?: number
         upload?: boolean
       }

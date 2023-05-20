@@ -39,15 +39,15 @@ export default class BaseCore {
 
   /**
    * 上报日志
-   * @param sumbitUrl 上报地址
+   * @param submitUrl 上报地址
    * @param header 请求头
    */
   declare reportLog: (
-    sumbitUrl: string,
+    submitUrl: string,
     data: Record<string, any>,
     header?: Record<string, any>,
     options?: {
-      lastest?: boolean
+      latest?: boolean
       day?: number
       upload?: boolean
     }

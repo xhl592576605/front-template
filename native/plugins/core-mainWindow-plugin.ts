@@ -1,7 +1,7 @@
-import Core from '../core'
-import { CorePlugin } from './core-plugin'
-import getPort from '../utils/get-port'
 import { app } from 'electron'
+import Core from '../core'
+import getPort from '../utils/get-port'
+import { CorePlugin } from './core-plugin'
 export default class CoreMainWindowPlugin implements CorePlugin {
   name = 'core-mainWindow-plugin'
 
