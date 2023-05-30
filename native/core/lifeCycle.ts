@@ -1,7 +1,7 @@
+import { NotificationResponse } from 'electron'
 import { AsyncSeriesHook, SyncHook, SyncWaterfallHook } from 'tapable'
 import Core from '.'
 import { Options } from '../types/coreOptions'
-
 export default class LifeCycle {
   // 合并option之前
   beforeMergeOption: SyncWaterfallHook<Options>
@@ -26,6 +26,15 @@ export default class LifeCycle {
   awaitCreateMainWindow: AsyncSeriesHook<Core>
   afterCreateMainWindow: SyncHook<Core>
 
+  // electron-app的钩子
+  awaitAppSecondInstance: AsyncSeriesHook<Core_ElectronEvent_Args>
+  awaitAppWindowAllClosed: AsyncSeriesHook<Core>
+  awaitAppReady: AsyncSeriesHook<Core_ElectronEvent_LaunchInfo_Args>
+  awaitAppActivate: AsyncSeriesHook<Core_ElectronEvent_HasVisibleWindows_Args>
+
+  beforeAppQuit: SyncHook<Core>
+  beforeAppRelaunch: SyncHook<Core>
+
   constructor() {
     this.beforeMergeOption = new SyncWaterfallHook(['option'])
 
@@ -44,5 +53,29 @@ export default class LifeCycle {
     this.beforeCreateMainWindow = new SyncHook(['core'])
     this.awaitCreateMainWindow = new AsyncSeriesHook(['core'])
     this.afterCreateMainWindow = new SyncHook(['core'])
+
+    this.awaitAppSecondInstance = new AsyncSeriesHook(['core', 'event'])
+    this.awaitAppWindowAllClosed = new AsyncSeriesHook(['core'])
+    this.awaitAppReady = new AsyncSeriesHook(['core', 'event', 'launchInfo'])
+    this.awaitAppActivate = new AsyncSeriesHook([
+      'core',
+      'event',
+      'hasVisibleWindows'
+    ])
+
+    this.beforeAppQuit = new SyncHook(['core'])
+    this.beforeAppRelaunch = new SyncHook(['core'])
   }
 }
+
+export type Core_ElectronEvent_Args = [Core, Electron.Event]
+export type Core_ElectronEvent_LaunchInfo_Args = [
+  Core,
+  Electron.Event,
+  Record<string, any> | NotificationResponse
+]
+export type Core_ElectronEvent_HasVisibleWindows_Args = [
+  Core,
+  Electron.Event,
+  boolean
+]

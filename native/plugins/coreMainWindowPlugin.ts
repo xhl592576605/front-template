@@ -15,39 +15,60 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * @returns
      */
     const createElectronApp = () => {
-      //todo: 监听进程错误进行
       return new Promise<void>((resolve, reject) => {
-        // todo: 做一些初始化
-        app.disableHardwareAcceleration()
-        const gotTheLock = app.requestSingleInstanceLock()
-        if (!gotTheLock) {
-          $core.appQuit()
-          return
-        } else {
-          app.on('second-instance', (event) => {
-            //todo: 加个生命周期的调用
-            $core.restoreMainWindow()
-          })
-        }
-
-        app.on('window-all-closed', () => {
-          //todo: 加个生命周期的调用
-          if (process.platform !== 'darwin') {
-            $core.mainLogger.log('window-all-closed quit')
+        $core.mainLogger.info(`$core ${this.name} createElectronApp called`)
+        try {
+          app.disableHardwareAcceleration()
+          const gotTheLock = app.requestSingleInstanceLock()
+          if (!gotTheLock) {
             $core.appQuit()
+            return
+          } else {
+            app.on('second-instance', async (event) => {
+              $core.mainLogger.log('app second-instance')
+              await $core.lifeCycle.awaitAppSecondInstance.promise($core, event)
+              $core.restoreMainWindow()
+            })
           }
-        })
 
-        app.on('ready', async () => {
-          //todo: 加个生命周期的调用
-          await createMainWindow()
-          app.on('activate', async () => {
-            //todo: 加个生命周期的调用
-            $core.restoreMainWindow()
+          app.on('window-all-closed', async () => {
+            $core.mainLogger.log('app window-all-closed')
+            await $core.lifeCycle.awaitAppWindowAllClosed.promise($core)
+            if (process.platform !== 'darwin') {
+              $core.mainLogger.log('window-all-closed quit')
+              $core.appQuit()
+            }
           })
-          resolve()
-        })
+
+          app.on('ready', async (event, launchInfo) => {
+            await $core.lifeCycle.awaitAppReady.promise(
+              $core,
+              event,
+              launchInfo
+            )
+            await createMainWindow()
+            app.on('activate', async (event, hasVisibleWindows) => {
+              await $core.lifeCycle.awaitAppActivate.promise(
+                $core,
+                event,
+                hasVisibleWindows
+              )
+              $core.restoreMainWindow()
+            })
+            resolve()
+          })
+        } catch (e) {
+          reject(e)
+        }
       })
+        .then(() =>
+          $core.mainLogger.info(
+            `$core ${this.name} createElectronApp called successfully`
+          )
+        )
+        .catch((e) => {
+          throw e
+        })
     }
 
     /**
@@ -73,7 +94,8 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * 退出应用
      */
     const appQuit = () => {
-      //todo: 加个生命周期的调用
+      $core.lifeCycle.beforeAppQuit.call($core)
+      $core.mainLogger.info('app quit')
       app.quit()
     }
 
@@ -81,10 +103,12 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * 重启应用
      */
     const appRelaunch = () => {
-      //todo: 加个生命周期的调用
+      $core.lifeCycle.beforeAppRelaunch.call($core)
+      $core.mainLogger.info('app relaunch')
       app.relaunch()
       app.exit()
     }
+
     /**
      * 初始化窗口参数
      */
@@ -119,7 +143,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           let { port, portRange } = $core.config.mainServer!
           const _port = await getPort(port!, portRange)
           $core.mainLogger.info('$core.config.mainServer 获取到的端口', _port)
-          createElectronApp()
+          await createElectronApp()
           $core.appQuit = appQuit.bind($core)
           $core.appRelaunch = appRelaunch.bind($core)
           $core.restoreMainWindow = restoreMainWindow.bind($core)
