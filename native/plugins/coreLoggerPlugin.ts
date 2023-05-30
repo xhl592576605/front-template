@@ -2,7 +2,7 @@ import fs from 'fs'
 import Core from '../core'
 import * as Exception from '../exception'
 import createLogger from '../utils/logger'
-import { CorePlugin } from './core-plugin'
+import { CorePlugin } from './corePlugin'
 
 export default class CoreLoggerPlugin implements CorePlugin {
   name = 'core-logger-plugin'
@@ -20,7 +20,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
     ) => {
       //todo: 要做上传日志的业务
     }
-    $core.hooks.awaitInitLogger.tapPromise(
+    $core.lifeCycle.awaitInitLogger.tapPromise(
       {
         name: this.name,
         stage: -1

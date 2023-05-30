@@ -1,4 +1,4 @@
-import { LoadURLOptions } from 'electron'
+import { BrowserWindowConstructorOptions, LoadURLOptions } from 'electron'
 import { LevelOption } from 'electron-log'
 
 /**
@@ -16,6 +16,7 @@ import { LevelOption } from 'electron-log'
  *  - enable 是否启用
  *  - url 远程地址
  *  - options 加载url的参数
+ * @param windowsOption 窗口参数
  * @param logger 日志
  *  - dir 日志目录
  *  - log 日志
@@ -51,6 +52,11 @@ export interface ApplicationConfig {
   remoteUrl?: {
     enable?: boolean
     url: string
+  }
+  mainWindow: {
+    option: BrowserWindowConstructorOptions
+    openDevTools: boolean
+    openAppMenu: boolean
   }
   logger: {
     dir: string

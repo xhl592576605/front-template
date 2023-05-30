@@ -3,24 +3,24 @@ import { app } from 'electron'
 import merge from 'lodash/merge'
 import path from 'path'
 import CorePlugins, { CorePlugin } from '../plugins'
-import { CoreOptions, Options } from '../types/core-options'
-import getmac from '../utils/get-mac'
-import BaseCore from './base-core'
-import Hooks from './hooks'
+import { CoreOptions, Options } from '../types/coreOptions'
+import getmac from '../utils/getMac'
+import BaseCore from './baseCore'
+import LifeCycle from './lifeCycle'
 
 class Core extends BaseCore {
   private debug = debug('core')
   public options!: CoreOptions
-  public hooks: Hooks
+  public lifeCycle: LifeCycle
 
   constructor() {
     /**
      * 1. 初始化内部参数
-     * 2. 初始化hooks
+     * 2. 初始化lifeCycle
      */
     super()
     this.initOptions()
-    this.hooks = new Hooks()
+    this.lifeCycle = new LifeCycle()
   }
 
   /**
@@ -28,7 +28,7 @@ class Core extends BaseCore {
    */
   public async init(options?: Options) {
     /**
-     * 1. 应用hooks
+     * 1. 应用lifeCycle
      * 2. 合并内部option
      * 3. 初始化配置
      * 4. 开始走流程
@@ -37,24 +37,24 @@ class Core extends BaseCore {
     this.mergeOption(options)
 
     // 初始化配置
-    this.hooks.beforeGetConfig.call(this)
-    await this.hooks.awaitGetConfig.promise(this)
-    this.hooks.afterGetConfig.call(this)
+    this.lifeCycle.beforeGetConfig.call(this)
+    await this.lifeCycle.awaitGetConfig.promise(this)
+    this.lifeCycle.afterGetConfig.call(this)
 
     // 初始化logger
-    this.hooks.beforeInitLogger.call(this)
-    await this.hooks.awaitInitLogger.promise(this)
-    this.hooks.afterInitLogger.call(this)
+    this.lifeCycle.beforeInitLogger.call(this)
+    await this.lifeCycle.awaitInitLogger.promise(this)
+    this.lifeCycle.afterInitLogger.call(this)
 
     // 初始化应用
-    this.hooks.beforeInitApp.call(this)
-    await this.hooks.awaitInitApp.promise(this)
-    this.hooks.afterInitApp.call(this)
+    this.lifeCycle.beforeInitApp.call(this)
+    await this.lifeCycle.awaitInitApp.promise(this)
+    this.lifeCycle.afterInitApp.call(this)
 
     // 初始化窗口
-    this.hooks.beforeCreateMainWindow.call(this)
-    await this.hooks.awaitCreateMainWindow.promise(this)
-    this.hooks.afterCreateMainWindow.call(this)
+    this.lifeCycle.beforeCreateMainWindow.call(this)
+    await this.lifeCycle.awaitCreateMainWindow.promise(this)
+    this.lifeCycle.afterCreateMainWindow.call(this)
 
     return this
   }
@@ -120,7 +120,7 @@ class Core extends BaseCore {
   private mergeOption(outOptions?: Options) {
     const options = this.options!
     if (outOptions) {
-      outOptions = this.hooks.beforeMergeOption.call(outOptions)
+      outOptions = this.lifeCycle.beforeMergeOption.call(outOptions)
       merge(options, outOptions)
     }
     const { env } = process

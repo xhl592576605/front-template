@@ -12,7 +12,7 @@
   - SyncWaterfallHook 表示如果上一个回调函数的结果不为 undefined,则可以作为下一个回调函数的第一个参数
   - 回调函数的参数来自上一个函数的结果
   - 调用 call 传入的第一个参数，会被上一个函数的非 undefined 结果替换
-  - 当回调函数返回非 undefiend 不会停止回调栈的调用
+  - 当回调函数返回非 undefined 不会停止回调栈的调用
 
 - SyncLoopHook
   - SyncLoopHook 的特点是不停的循环执行回调函数，直到函数结果等于 undefined
@@ -30,7 +30,7 @@
   - 任务一个一个执行，执行完上一个执行下一个
 
 - AsyncSeriesBailHook
-  - 只要有一个返回了不为 undefiend 的值就直接结束
+  - 只要有一个返回了不为 undefined 的值就直接结束
 
 - AsyncSeriesWaterfall
   - 只要有一个返回了不为 undefined 的值就直接结束

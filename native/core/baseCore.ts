@@ -6,35 +6,20 @@ export default class BaseCore {
    * 定义一些虚拟方法，在对应的插件进行实现
    */
 
-  /**
-   * 配置文件
-   */
+  /** 配置文件 */
   declare config: ApplicationConfig
-  /**
-   * 获取配置文件路径
-   */
+  /** 获取配置文件路径  */
   declare getConfigFilePath: () => string
-  /**
-   * 更新配置文件到本地
-   */
+  /** 更新配置文件到本地 */
   declare updateConfigFile: () => void
 
-  /**
-   * 主进程日志记录对象
-   */
+  /** 主进程日志记录对象 */
   declare mainLogger: ElectronLog
-  /**
-   * 网络请求日志记录对象
-   */
+  /** 网络请求日志记录对象 */
   declare netLogger: ElectronLog
-  /**
-   * 渲染进程日志记录对象
-
-   */
+  /** 渲染进程日志记录对象 /
   declare rendererLogger: ElectronLog
-  /**
-   * webview日志记录对象
-   */
+  /** webview日志记录对象 */
   declare webViewLogger: ElectronLog
 
   /**
@@ -53,5 +38,15 @@ export default class BaseCore {
     }
   ) => void
 
-  declare quit: () => void
+  /** 主窗口 */
+  declare mainWindow: Electron.BrowserWindow
+
+  /** 应用退出 */
+  declare appQuit: () => void
+
+  /** 应用重启 */
+  declare appRelaunch: () => void
+
+  /** 还原窗口 */
+  declare restoreMainWindow: () => void
 }

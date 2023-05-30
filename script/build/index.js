@@ -5,9 +5,9 @@ const basePath = process.cwd()
 const buildWin = () => {
   return new Promise((resolve, reject) => {
     log.info('开始打包electron-win')
-    const exceStr = `electron-builder -w=nsis --x64 --ia32 --arm64 --config ./script/build/config/window.js `
-    log.info(`exceStr:${exceStr}`)
-    shell.exec(exceStr, (code) => {
+    const execStr = `electron-builder -w=nsis --x64 --ia32 --arm64 --config ./script/build/config/window.js `
+    log.info(`execStr:${execStr}`)
+    shell.exec(execStr, (code) => {
       if (code !== 0) {
         reject('打包win失败')
         return
@@ -20,9 +20,9 @@ const buildWin = () => {
 const buildMac = () => {
   return new Promise((resolve, reject) => {
     log.info('开始打包electron-mac')
-    const exceStr = `electron-builder -m --x64 --arm64 --config ./script/build/config/mac.js `
-    log.info(`exceStr:${exceStr}`)
-    shell.exec(exceStr, (code) => {
+    const execStr = `electron-builder -m --x64 --arm64 --config ./script/build/config/mac.js `
+    log.info(`execStr:${execStr}`)
+    shell.exec(execStr, (code) => {
       if (code !== 0) {
         reject('打包mac失败')
         return
@@ -36,9 +36,9 @@ const buildMac = () => {
 const buildLinux = () => {
   return new Promise((resolve, reject) => {
     log.info('开始打包electron-linux')
-    const exceStr = `electron-builder -l=deb --x64 --arm64 --armv7l --config ./script/build/config/linux.js `
-    log.info(`exceStr:${exceStr}`)
-    shell.exec(exceStr, (code) => {
+    const execStr = `electron-builder -l=deb --x64 --arm64 --armv7l --config ./script/build/config/linux.js `
+    log.info(`execStr:${execStr}`)
+    shell.exec(execStr, (code) => {
       if (code !== 0) {
         reject('打包linux失败')
         return

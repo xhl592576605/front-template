@@ -26,17 +26,6 @@ module.exports = {
   electronDownload: {
     mirror: 'https://npmmirror.com/mirrors/electron/'
   },
-  nsis: {
-    oneClick: false,
-    allowElevation: true,
-    allowToChangeInstallationDirectory: true,
-    installerIcon: './build/icons/icon.ico',
-    uninstallerIcon: './build/icons/icon.ico',
-    installerHeaderIcon: './build/icons/icon.ico',
-    createDesktopShortcut: true,
-    createStartMenuShortcut: true,
-    shortcutName: 'HANS'
-  },
   publish: [
     {
       provider: 'generic',

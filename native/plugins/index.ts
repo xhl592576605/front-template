@@ -1,7 +1,7 @@
-import CoreConfigPlugin from './core-config-plugin'
-import CoreLoggerPlugin from './core-logger-plugin'
-import CoreMainWindowPlugin from './core-mainWindow-plugin'
-import { CorePlugin } from './core-plugin'
+import CoreConfigPlugin from './coreConfigPlugin'
+import CoreLoggerPlugin from './coreLoggerPlugin'
+import CoreMainWindowPlugin from './coreMainWindowPlugin'
+import { CorePlugin } from './corePlugin'
 
 export default [
   new CoreConfigPlugin(),

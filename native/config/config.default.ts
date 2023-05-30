@@ -21,6 +21,25 @@ export default ($core: Core) => {
         }
       }
     },
+    mainWindow: {
+      option: {
+        title: $core.options.appName,
+        width: 980,
+        height: 650,
+        minWidth: 800,
+        minHeight: 650,
+        webPreferences: {
+          nodeIntegration: false,
+          webSecurity: false,
+          allowRunningInsecureContent: true,
+          contextIsolation: true
+        },
+        show: false,
+        fullscreen: true
+      },
+      openDevTools: true,
+      openAppMenu: true
+    },
     logger: {
       dir: $core.options.logs,
       log: {

@@ -1,4 +1,4 @@
-import { CorePlugin } from '../plugins/core-plugin'
+import { CorePlugin } from '../plugins/corePlugin'
 
 /**
  * core option

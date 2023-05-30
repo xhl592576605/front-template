@@ -5,8 +5,8 @@ import path from 'path'
 import yaml from 'yaml'
 import Core from '../core'
 import { ApplicationConfig } from '../types/config'
-import loadModule from '../utils/load-module'
-import { CorePlugin } from './core-plugin'
+import loadModule from '../utils/loadModule'
+import { CorePlugin } from './corePlugin'
 /**
  * 配置插件
  * ! 该插件需要最先加载, 以保证其他插件可以使用配置,并且要保证配置路径逻辑都要正确
@@ -80,7 +80,7 @@ export default class CoreConfigPlugin implements CorePlugin {
       return defaultConfig
     }
 
-    $core.hooks.awaitGetConfig.tapPromise(this.name, async () => {
+    $core.lifeCycle.awaitGetConfig.tapPromise(this.name, async () => {
       /**
        * 获取内存配置
        * 读取本地配置
@@ -107,7 +107,7 @@ export default class CoreConfigPlugin implements CorePlugin {
         this.debug('awaitGetConfig:%j', e.message)
       }
     })
-    $core.hooks.afterGetConfig.tap(this.name, () => {
+    $core.lifeCycle.afterGetConfig.tap(this.name, () => {
       // 更新配置文件
       updateConfigFile()
     })

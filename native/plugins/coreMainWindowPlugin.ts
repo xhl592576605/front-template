@@ -1,7 +1,8 @@
 import { app } from 'electron'
 import Core from '../core'
-import getPort from '../utils/get-port'
-import { CorePlugin } from './core-plugin'
+import getPort from '../utils/getPort'
+import { CorePlugin } from './corePlugin'
+const MainWindowSymbol = Symbol('Electron#mainWindow')
 export default class CoreMainWindowPlugin implements CorePlugin {
   name = 'core-mainWindow-plugin'
 
@@ -14,15 +15,33 @@ export default class CoreMainWindowPlugin implements CorePlugin {
       //todo: 监听进程错误进行
       return new Promise<void>((resolve, reject) => {
         // todo: 做一些初始化
+        app.disableHardwareAcceleration()
         const gotTheLock = app.requestSingleInstanceLock()
         if (!gotTheLock) {
-          $core.quit()
+          $core.appQuit()
           return
         } else {
-          app.on('second-instance', (event) => {})
+          app.on('second-instance', (event) => {
+            //todo: 加个生命周期的调用
+            $core.restoreMainWindow()
+          })
         }
-        app.disableHardwareAcceleration()
+
+        app.on('window-all-closed', () => {
+          //todo: 加个生命周期的调用
+          if (process.platform !== 'darwin') {
+            $core.mainLogger.log('window-all-closed quit')
+            $core.appQuit()
+          }
+        })
+
+        app.on('activate', async () => {
+          //todo: 加个生命周期的调用
+          $core.restoreMainWindow()
+        })
+
         app.on('ready', async () => {
+          //todo: 加个生命周期的调用
           await createMainWindow()
           resolve()
         })
@@ -32,11 +51,40 @@ export default class CoreMainWindowPlugin implements CorePlugin {
     /**
      * 创建主窗口
      */
-    const createMainWindow = async () => {}
+    const createMainWindow = async () => {
+
+    }
+
+    /**
+     * 还原窗口
+     */
+    const restoreMainWindow = () => {
+      if ($core.mainWindow) {
+        if ($core.mainWindow.isMinimized()) $core.mainWindow.restore()
+        $core.mainWindow.focus()
+      }
+    }
+
+    /**
+     * 退出应用
+     */
+    const appQuit = () => {
+      //todo: 加个生命周期的调用
+      app.quit()
+    }
+
+    /**
+     * 重启应用
+     */
+    const appRelaunch = () => {
+      //todo: 加个生命周期的调用
+      app.relaunch()
+      app.exit()
+    }
     /**
      * 初始化窗口参数
      */
-    $core.hooks.beforeCreateMainWindow.tap(
+    $core.lifeCycle.beforeCreateMainWindow.tap(
       {
         name: this.name,
         stage: -1
@@ -51,7 +99,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
     /**
      * 根据配置，创建窗口，并将本地web启动起来
      */
-    $core.hooks.awaitCreateMainWindow.tapPromise(
+    $core.lifeCycle.awaitCreateMainWindow.tapPromise(
       {
         name: this.name,
         stage: -1
@@ -68,6 +116,9 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           const _port = await getPort(port!, portRange)
           $core.mainLogger.info('$core.config.mainServer 获取到的端口', _port)
           createElectronApp()
+          $core.appQuit = appQuit.bind($core)
+          $core.appRelaunch = appRelaunch.bind($core)
+          $core.restoreMainWindow = restoreMainWindow.bind($core)
           $core.mainLogger.info(
             `$core ${this.name} awaitCreateMainWindow called successfully`
           )
@@ -83,7 +134,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
     /**
      * 最后更新下配置文件到本地
      */
-    $core.hooks.afterCreateMainWindow.tap(
+    $core.lifeCycle.afterCreateMainWindow.tap(
       {
         name: this.name,
         stage: 9999

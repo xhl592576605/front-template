@@ -1,8 +1,8 @@
 import { AsyncSeriesHook, SyncHook, SyncWaterfallHook } from 'tapable'
 import Core from '.'
-import { Options } from '../types/core-options'
+import { Options } from '../types/coreOptions'
 
-export default class Hooks {
+export default class LifeCycle {
   // 合并option之前
   beforeMergeOption: SyncWaterfallHook<Options>
 
