@@ -34,14 +34,14 @@ export interface ApplicationConfig {
         protocol?: string
         hostname: string
         indexPage?: string
-        port?: number
+        port: number
       }
     }
   }
   mainServer?: {
-    protocol?: string
-    host: string
-    port?: number
+    protocol: string
+    hostname: string
+    port: number
     portRange?: [number, number]
     ssl?: {
       key: string

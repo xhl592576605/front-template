@@ -6,7 +6,7 @@ const zeroRegex = /(?:[0]{1,2}[:-]){5}[0]{1,2}/
  * Get the first proper MAC address
  * @param iface If provided, restrict MAC address fetching to this interface
  */
-export default function getMac(iface?: string): NetworkInterfaceInfoIPv4 {
+export default (iface?: string): NetworkInterfaceInfoIPv4 => {
   const list = networkInterfaces()
   if (iface) {
     const parts = list[iface]
@@ -45,6 +45,6 @@ export default function getMac(iface?: string): NetworkInterfaceInfoIPv4 {
 }
 
 /** Check if the input is a valid MAC address */
-export function isMAC(macAddress: string) {
+export const isMAC = (macAddress: string) => {
   return macRegex.test(macAddress)
 }

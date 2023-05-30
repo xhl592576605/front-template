@@ -5,19 +5,20 @@ export default ($core: Core) => {
   const config: ApplicationConfig = {
     env: 'devp',
     developmentMode: {
-      default: DevelopmentMode.vue,
+      default: DevelopmentMode.html,
       mode: {
         vue: {
           hostname: 'localhost',
-          port: 8080
+          port: 3000
         },
         react: {
           hostname: 'localhost',
-          port: 3000
+          port: 8080
         },
         html: {
           hostname: 'localhost',
-          indexPage: 'index.html'
+          indexPage: 'index.html',
+          port: 3000
         }
       }
     },
@@ -34,8 +35,7 @@ export default ($core: Core) => {
           allowRunningInsecureContent: true,
           contextIsolation: true
         },
-        show: false,
-        fullscreen: true
+        show: true
       },
       openDevTools: true,
       openAppMenu: true
@@ -64,7 +64,7 @@ export default ($core: Core) => {
   }
   config.mainServer = {
     protocol: 'http://',
-    host: 'localhost',
+    hostname: 'localhost',
     port: 7072,
     portRange: [7072, 7100]
   }

@@ -1,12 +1,15 @@
 import { app } from 'electron'
 import Core from '../core'
+import useMainServer from '../hooks/useMainServer'
+import useMainWindow from '../hooks/useMainWindow'
 import getPort from '../utils/getPort'
 import { CorePlugin } from './corePlugin'
-const MainWindowSymbol = Symbol('Electron#mainWindow')
 export default class CoreMainWindowPlugin implements CorePlugin {
   name = 'core-mainWindow-plugin'
 
   apply($core: Core) {
+    const { getMainWindow } = useMainWindow($core)
+    const { createMainServer } = useMainServer($core)
     /**
      * 创建应用
      * @returns
@@ -35,14 +38,13 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           }
         })
 
-        app.on('activate', async () => {
-          //todo: 加个生命周期的调用
-          $core.restoreMainWindow()
-        })
-
         app.on('ready', async () => {
           //todo: 加个生命周期的调用
           await createMainWindow()
+          app.on('activate', async () => {
+            //todo: 加个生命周期的调用
+            $core.restoreMainWindow()
+          })
           resolve()
         })
       })
@@ -52,7 +54,9 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * 创建主窗口
      */
     const createMainWindow = async () => {
-
+      const mainWindow = getMainWindow()
+      $core.mainWindow = mainWindow!
+      await createMainServer()
     }
 
     /**

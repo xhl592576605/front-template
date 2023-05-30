@@ -84,7 +84,7 @@ class Core extends BaseCore {
     const { env, platform, arch } = process
     const { mac, address: ip } = getmac()
     const options: CoreOptions = {
-      env: (env.NODE_ENV as any) || 'production',
+      env: (env.NODE_ENV as any) || 'prod',
       platform,
       arch,
       mac,
@@ -103,7 +103,10 @@ class Core extends BaseCore {
       execDir: app.getAppPath(),
       plugins: CorePlugins
     }
-    if (options.env == 'production' && options.isPackaged) {
+    if (
+      (options.env === 'prod' || options.env === 'production') &&
+      options.isPackaged
+    ) {
       options.execDir = path.dirname(app.getPath('exe'))
       options.baseDir = path.join(app.getAppPath(), 'out')
     }

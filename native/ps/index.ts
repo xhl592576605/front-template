@@ -7,22 +7,23 @@ export const isPackaged = () => {
  */
 export const isDev = () => {
   if (
-    process.env.EE_SERVER_ENV === 'development' ||
-    process.env.EE_SERVER_ENV === 'dev' ||
-    process.env.EE_SERVER_ENV === 'local'
-  ) {
-    return true
-  }
-
-  if (
     process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'dev' ||
+    process.env.NODE_ENV === 'devp' ||
     process.env.NODE_ENV === 'local'
   ) {
     return true
   }
 
   return false
+}
+
+/**
+ * 是否生产环境
+ */
+export const isProd = () => {
+  return (
+    process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'production'
+  )
 }
 
 /**
