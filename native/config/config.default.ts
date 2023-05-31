@@ -1,7 +1,10 @@
+import path from 'path'
 import Core from '../core'
 import { ApplicationConfig, DevelopmentMode } from '../types/config'
 
 export default ($core: Core) => {
+  const preloadPath = path.join($core.options.baseDir, 'preload/index.js')
+
   const config: ApplicationConfig = {
     env: 'devp',
     developmentMode: {
@@ -30,10 +33,9 @@ export default ($core: Core) => {
         minWidth: 800,
         minHeight: 650,
         webPreferences: {
-          nodeIntegration: false,
-          webSecurity: false,
-          allowRunningInsecureContent: true,
-          contextIsolation: true
+          // nodeIntegration:true, Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+          preload: preloadPath,
+          webviewTag: true
         },
         show: true
       },
@@ -60,7 +62,8 @@ export default ($core: Core) => {
           level: 'info'
         }
       }
-    }
+    },
+    preloadPath
   }
   config.mainServer = {
     protocol: 'http://',

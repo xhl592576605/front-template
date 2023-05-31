@@ -67,6 +67,7 @@ export interface ApplicationConfig {
       webView: LoggerOption
     }
   }
+  preloadPath: string
 }
 
 export type LoggerOption = {

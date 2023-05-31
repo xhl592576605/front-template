@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "tsc && cross-env NODE_ENV=prod electron out/main.js",
-    "electron:dev": " tsc && cross-env DEBUG=* NODE_ENV=devp electron out/main.js --trace-warnings --inspect --remote-debugging-port=9222",
+    "electron:dev": " tsc && cross-env DEBUG=* NODE_ENV=devp electron out/main.js  --inspect --remote-debugging-port=9222",
     "electron:watch": "nodemon --config ./native/config/nodemon.json",
     "electron:build": "cross-env NODE_ENV=prod tsc ",
     "fronted:dev": "cd frontend && npm run dev",
