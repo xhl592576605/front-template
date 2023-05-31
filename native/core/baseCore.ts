@@ -14,13 +14,13 @@ export default class BaseCore {
   declare updateConfigFile: () => void
 
   /** 主进程日志记录对象 */
-  declare mainLogger: ElectronLog
+  declare readonly mainLogger: ElectronLog
   /** 网络请求日志记录对象 */
-  declare netLogger: ElectronLog
-  /** 渲染进程日志记录对象 /
-  declare rendererLogger: ElectronLog
+  declare readonly netLogger: ElectronLog
+  /** 渲染进程日志记录对象 */
+  declare readonly rendererLogger: ElectronLog
   /** webview日志记录对象 */
-  declare webViewLogger: ElectronLog
+  declare readonly webViewLogger: ElectronLog
 
   /**
    * 上报日志
@@ -37,6 +37,9 @@ export default class BaseCore {
       upload?: boolean
     }
   ) => void
+
+  /** 执行webview的日志记录 */
+  declare execWebViewLog: (level: number, message: string) => void
 
   /** 主窗口 */
   declare mainWindow: Electron.BrowserWindow

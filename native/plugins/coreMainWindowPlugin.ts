@@ -2,6 +2,7 @@ import { app } from 'electron'
 import Core from '../core'
 import useMainServer from '../hooks/useMainServer'
 import useMainWindow from '../hooks/useMainWindow'
+import useWebRequest from '../hooks/useWebRequest'
 import getPort from '../utils/getPort'
 import { CorePlugin } from './corePlugin'
 export default class CoreMainWindowPlugin implements CorePlugin {
@@ -10,6 +11,8 @@ export default class CoreMainWindowPlugin implements CorePlugin {
   apply($core: Core) {
     const { getMainWindow } = useMainWindow($core)
     const { createMainServer } = useMainServer($core)
+    const { registerWebRequestIntercept } = useWebRequest($core)
+
     /**
      * 创建应用
      * @returns
@@ -144,6 +147,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           const _port = await getPort(port!, portRange)
           $core.mainLogger.info('$core.config.mainServer 获取到的端口', _port)
           await createElectronApp()
+          registerWebRequestIntercept()
           $core.appQuit = appQuit.bind($core)
           $core.appRelaunch = appRelaunch.bind($core)
           $core.restoreMainWindow = restoreMainWindow.bind($core)

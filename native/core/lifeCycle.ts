@@ -1,5 +1,23 @@
-import { NotificationResponse } from 'electron'
-import { AsyncSeriesHook, SyncHook, SyncWaterfallHook } from 'tapable'
+import {
+  BeforeSendResponse,
+  CallbackResponse,
+  HeadersReceivedResponse,
+  NotificationResponse,
+  OnBeforeRedirectListenerDetails,
+  OnBeforeRequestListenerDetails,
+  OnBeforeSendHeadersListenerDetails,
+  OnCompletedListenerDetails,
+  OnErrorOccurredListenerDetails,
+  OnHeadersReceivedListenerDetails,
+  OnResponseStartedListenerDetails,
+  OnSendHeadersListenerDetails
+} from 'electron'
+import {
+  AsyncSeriesHook,
+  AsyncSeriesWaterfallHook,
+  SyncHook,
+  SyncWaterfallHook
+} from 'tapable'
 import Core from '.'
 import { Options } from '../types/coreOptions'
 export default class LifeCycle {
@@ -27,13 +45,41 @@ export default class LifeCycle {
   afterCreateMainWindow: SyncHook<Core>
 
   // electron-app的钩子
-  awaitAppSecondInstance: AsyncSeriesHook<Core_ElectronEvent_Args>
+  awaitAppSecondInstance: AsyncSeriesHook<[Core, Electron.Event]>
   awaitAppWindowAllClosed: AsyncSeriesHook<Core>
-  awaitAppReady: AsyncSeriesHook<Core_ElectronEvent_LaunchInfo_Args>
-  awaitAppActivate: AsyncSeriesHook<Core_ElectronEvent_HasVisibleWindows_Args>
+  awaitAppReady: AsyncSeriesHook<
+    [Core, Electron.Event, Record<string, any> | NotificationResponse]
+  >
+  awaitAppActivate: AsyncSeriesHook<[Core, Electron.Event, boolean]>
 
   beforeAppQuit: SyncHook<Core>
   beforeAppRelaunch: SyncHook<Core>
+
+  // webRequest钩子
+  awaitWebRequestOnBeforeRequest: AsyncSeriesWaterfallHook<
+    [CallbackResponse, OnBeforeRequestListenerDetails, Core]
+  >
+  awaitWebRequestOnBeforeSendHeaders: AsyncSeriesWaterfallHook<
+    [BeforeSendResponse, OnBeforeSendHeadersListenerDetails, Core]
+  >
+  awaitWebRequestOnSendHeaders: AsyncSeriesHook<
+    [OnSendHeadersListenerDetails, Core]
+  >
+  awaitWebRequestOnHeadersReceived: AsyncSeriesWaterfallHook<
+    [HeadersReceivedResponse, OnHeadersReceivedListenerDetails, Core]
+  >
+  awaitWebRequestOnResponseStarted: AsyncSeriesHook<
+    [OnResponseStartedListenerDetails, Core]
+  >
+  awaitWebRequestOnBeforeRedirect: AsyncSeriesHook<
+    [OnBeforeRedirectListenerDetails, Core]
+  >
+  awaitWebRequestOnCompleted: AsyncSeriesHook<
+    [OnCompletedListenerDetails, Core]
+  >
+  awaitWebRequestOnErrorOccurred: AsyncSeriesHook<
+    [OnErrorOccurredListenerDetails, Core]
+  >
 
   constructor() {
     this.beforeMergeOption = new SyncWaterfallHook(['option'])
@@ -65,17 +111,35 @@ export default class LifeCycle {
 
     this.beforeAppQuit = new SyncHook(['core'])
     this.beforeAppRelaunch = new SyncHook(['core'])
+
+    this.awaitWebRequestOnBeforeRequest = new AsyncSeriesWaterfallHook([
+      'callbackResponse',
+      'core',
+      'details'
+    ])
+    this.awaitWebRequestOnBeforeSendHeaders = new AsyncSeriesWaterfallHook([
+      'beforeSendResponse',
+      'details',
+      'core'
+    ])
+    this.awaitWebRequestOnSendHeaders = new AsyncSeriesHook(['details', 'core'])
+    this.awaitWebRequestOnHeadersReceived = new AsyncSeriesWaterfallHook([
+      'headersReceivedResponse',
+      'details',
+      'core'
+    ])
+    this.awaitWebRequestOnResponseStarted = new AsyncSeriesHook([
+      'details',
+      'core'
+    ])
+    this.awaitWebRequestOnBeforeRedirect = new AsyncSeriesHook([
+      'details',
+      'core'
+    ])
+    this.awaitWebRequestOnCompleted = new AsyncSeriesHook(['details', 'core'])
+    this.awaitWebRequestOnErrorOccurred = new AsyncSeriesHook([
+      'details',
+      'core'
+    ])
   }
 }
-
-export type Core_ElectronEvent_Args = [Core, Electron.Event]
-export type Core_ElectronEvent_LaunchInfo_Args = [
-  Core,
-  Electron.Event,
-  Record<string, any> | NotificationResponse
-]
-export type Core_ElectronEvent_HasVisibleWindows_Args = [
-  Core,
-  Electron.Event,
-  boolean
-]
