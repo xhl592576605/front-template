@@ -1,6 +1,6 @@
 import path from 'path'
 import Core from '../core'
-import { isDev } from '../ps'
+import { isDev, isProd } from '../ps'
 import createKoaApp from '../utils/createKoaApp'
 
 export default (core: Core) => {
@@ -21,17 +21,14 @@ export default (core: Core) => {
       loadMainUrl(type, url)
       return
     }
-    let staticDir = undefined
-
-    // html模式
-    if (selectMode == 'html') {
-      if (isDev()) {
-        staticDir = path.join(homeDir, 'frontend', 'dist')
-        loadLocalWeb('html', staticDir, modeInfo as any)
-        return
-      }
+    if (isProd()) {
       loadLocalWeb('html')
       return
+    }
+    let staticDir = undefined
+    if (selectMode == 'html') {
+      staticDir = path.join(homeDir, 'frontend', 'dist')
+      loadLocalWeb('html', staticDir, modeInfo as any)
     }
     // 单页应用
     const protocol = modeInfo.protocol || 'http://'
@@ -49,9 +46,10 @@ export default (core: Core) => {
    * @param url 路径
    */
   const loadMainUrl = (type: string, url: string) => {
-    const { env: mainEnv } = core.config
+    const { mainServerEnv } = core.config
     const { options: mainServerOpt } = core.config.mainServer!
-    core.mainLogger?.info(`mainServer env:${mainEnv},type:${type}`)
+    core.mainLogger?.info(`node env:${process.env.NODE_ENV}`)
+    core.mainLogger?.info(`mainServer env:${mainServerEnv},type:${type}`)
     core.mainLogger?.info(`mainServer running at ${url}`)
     core.mainWindow.loadURL(url, mainServerOpt)
   }
@@ -64,21 +62,32 @@ export default (core: Core) => {
       hostname: string
       indexPage?: string
       port: number
+      ssl?: {
+        key: string
+        cert: string
+      }
     }
   ) => {
-    const { homeDir } = core.options
+    const { baseDir } = core.options
     if (!staticDir) {
-      staticDir = path.join(homeDir, 'public', 'dist')
+      staticDir = path.join(baseDir, 'public', 'dist')
     }
-    if (hostInfo) {
+    if (!hostInfo) {
       hostInfo = core.config.mainServer
     }
-    const { protocol, hostname, indexPage, port } = hostInfo!
+    const {
+      protocol = 'http://',
+      hostname = 'localhost',
+      indexPage = 'index.html',
+      port,
+      ssl
+    } = hostInfo!
     let url = `${protocol}${hostname}:${port}`
     if (mode === 'html') {
-      url = `${url}/${indexPage || 'index.html'}`
+      url = `${url}/${indexPage}`
     }
-    createKoaApp(staticDir, port, protocol).then(() => {
+    createKoaApp(staticDir, port, protocol, ssl).then(() => {
+      core.mainLogger?.info(`mainServer staticDir:${staticDir}`)
       loadMainUrl(mode, url)
     })
   }

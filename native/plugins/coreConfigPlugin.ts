@@ -100,6 +100,10 @@ export default class CoreConfigPlugin implements CorePlugin {
         } else {
           merge($core.config, innerConfig)
         }
+        this.debug('config:%j', $core.config)
+
+        const { env } = process
+        env.ELECTRON_MAIN_SERVER_ENV = $core.config.mainServerEnv
 
         $core.updateConfigFile = updateConfigFile.bind($core)
         $core.getConfigFilePath = getConfigFilePath.bind($core)

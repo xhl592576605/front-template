@@ -100,7 +100,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
         ...complete,
         ...error
       }
-      $core.netLogger.log(logObj.statusCode, JSON.stringify(logObj, null, 0))
+      $core.netLogger.log(logObj.statusCode, JSON.stringify(logObj, null, 0),'\n')
       netLogObjMap.delete(id)
     }
 

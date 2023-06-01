@@ -6,15 +6,11 @@ export const isPackaged = () => {
  * 是否为开发环境
  */
 export const isDev = () => {
-  if (
+  return (
     process.env.NODE_ENV === 'development' ||
     process.env.NODE_ENV === 'devp' ||
     process.env.NODE_ENV === 'local'
-  ) {
-    return true
-  }
-
-  return false
+  )
 }
 
 /**
@@ -47,6 +43,46 @@ export const isMain = () => {
  */
 export const isForkedChild = () => {
   return Number(process.env.ELECTRON_RUN_AS_NODE) === 1
+}
+
+/**
+ * 主服务页面是否为开发环境
+ * @returns
+ */
+export const isMainServerDev = () => {
+  return (
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'dev' ||
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'devp' ||
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'develop' ||
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'development'
+  )
+}
+
+/**
+ * 主服务页面是否为测试环境
+ * @returns
+ */
+export const isMainServerTest = () => {
+  return process.env.ELECTRON_MAIN_SERVER_ENV === 'test'
+}
+
+/**
+ * 主服务页面是否为预发环境
+ * @returns
+ */
+export const isMainServerPre = () => {
+  return process.env.ELECTRON_MAIN_SERVER_ENV === 'pre'
+}
+
+/**
+ * 主服务页面是否为生产环境
+ * @returns
+ */
+export const isMainServerProd = () => {
+  return (
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'prod' ||
+    process.env.ELECTRON_MAIN_SERVER_ENV === 'production'
+  )
 }
 
 /**

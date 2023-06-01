@@ -84,16 +84,6 @@ export default class CoreMainWindowPlugin implements CorePlugin {
     }
 
     /**
-     * 还原窗口
-     */
-    const restoreMainWindow = () => {
-      if ($core.mainWindow) {
-        if ($core.mainWindow.isMinimized()) $core.mainWindow.restore()
-        $core.mainWindow.focus()
-      }
-    }
-
-    /**
      * 退出应用
      */
     const appQuit = () => {
@@ -110,6 +100,35 @@ export default class CoreMainWindowPlugin implements CorePlugin {
       $core.mainLogger.info('app relaunch')
       app.relaunch()
       app.exit()
+    }
+    /**
+     * 还原窗口
+     */
+    const restoreMainWindow = () => {
+      if ($core.mainWindow) {
+        if ($core.mainWindow.isMinimized()) $core.mainWindow.restore()
+        $core.mainWindow.focus()
+      }
+    }
+
+    /**
+     * 切换主服务页面环境
+     * @param env
+     */
+    const changeMainServerEnv = (
+      env:
+        | 'dev'
+        | 'devp'
+        | 'develop'
+        | 'development'
+        | 'test'
+        | 'pre'
+        | 'prod'
+        | 'production'
+    ) => {
+      $core.config.mainServerEnv = env
+      $core.updateConfigFile()
+      $core.appRelaunch()
     }
 
     /**
@@ -151,6 +170,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           $core.appQuit = appQuit.bind($core)
           $core.appRelaunch = appRelaunch.bind($core)
           $core.restoreMainWindow = restoreMainWindow.bind($core)
+          $core.changeMainServerEnv = changeMainServerEnv.bind($core)
           $core.mainLogger.info(
             `$core ${this.name} awaitCreateMainWindow called successfully`
           )

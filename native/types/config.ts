@@ -3,7 +3,6 @@ import { LevelOption } from 'electron-log'
 
 /**
  * 应用配置
- * @param env 运行环境
  * @param developmentMode 开发模式
  * @param mainServer 主服务
  *  - protocol 协议
@@ -12,6 +11,7 @@ import { LevelOption } from 'electron-log'
  *  - portRange 端口范围
  *  - ssl ssl证书
  *  - options 加载url的参数
+ * @param mainServerEnv 主服务环境
  * @param remoteUrl 远程地址
  *  - enable 是否启用
  *  - url 远程地址
@@ -26,7 +26,6 @@ import { LevelOption } from 'electron-log'
  *   - webView webview日志
  */
 export interface ApplicationConfig {
-  env: 'devp' | 'test' | 'pre' | 'prod'
   developmentMode: {
     default: DevelopmentMode
     mode: {
@@ -49,6 +48,15 @@ export interface ApplicationConfig {
     }
     options?: LoadURLOptions
   }
+  mainServerEnv:
+    | 'dev'
+    | 'devp'
+    | 'develop'
+    | 'development'
+    | 'test'
+    | 'pre'
+    | 'prod'
+    | 'production'
   remoteUrl?: {
     enable?: boolean
     url: string

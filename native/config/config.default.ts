@@ -6,7 +6,6 @@ export default ($core: Core) => {
   const preloadPath = path.join($core.options.baseDir, 'preload/index.js')
 
   const config: ApplicationConfig = {
-    env: 'devp',
     developmentMode: {
       default: DevelopmentMode.html,
       mode: {
@@ -25,6 +24,13 @@ export default ($core: Core) => {
         }
       }
     },
+    mainServer: {
+      protocol: 'http://',
+      hostname: 'localhost',
+      port: 7072,
+      portRange: [7072, 7100]
+    },
+    mainServerEnv: 'prod',
     mainWindow: {
       option: {
         title: $core.options.appName,
@@ -64,12 +70,6 @@ export default ($core: Core) => {
       }
     },
     preloadPath
-  }
-  config.mainServer = {
-    protocol: 'http://',
-    hostname: 'localhost',
-    port: 7072,
-    portRange: [7072, 7100]
   }
 
   return config

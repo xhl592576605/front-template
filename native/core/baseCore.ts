@@ -52,4 +52,17 @@ export default class BaseCore {
 
   /** 还原窗口 */
   declare restoreMainWindow: () => void
+
+  /** 切换主服务页面环境 */
+  declare changeMainServerEnv: (
+    env:
+      | 'dev'
+      | 'devp'
+      | 'develop'
+      | 'development'
+      | 'test'
+      | 'pre'
+      | 'prod'
+      | 'production'
+  ) => void
 }
