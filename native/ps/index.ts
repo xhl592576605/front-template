@@ -8,7 +8,9 @@ export const isPackaged = () => {
 export const isDev = () => {
   return (
     process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'develop' ||
     process.env.NODE_ENV === 'devp' ||
+    process.env.NODE_ENV === 'dev' ||
     process.env.NODE_ENV === 'local'
   )
 }

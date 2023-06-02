@@ -4,7 +4,7 @@ import { CorePlugin } from '../plugins/corePlugin'
  * core option
  */
 export interface CoreOptions extends Options {
-  env: 'development' | 'devp' | 'test' | 'production' | 'prod' | 'local'
+  env: 'dev' | 'devp' | 'develop' | 'development' | 'prod' | 'production'
   platform: Platform
   arch: Architecture
   baseDir: string
