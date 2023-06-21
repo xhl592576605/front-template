@@ -4,6 +4,7 @@ import merge from 'lodash/merge'
 import path from 'path'
 import yaml from 'yaml'
 import Core from '../core'
+import { CWD, isDev } from '../ps'
 import { ApplicationConfig } from '../types/config'
 import loadModule from '../utils/loadModule'
 import { CorePlugin } from './corePlugin'
@@ -32,6 +33,14 @@ export default class CoreConfigPlugin implements CorePlugin {
      */
     const getConfigFilePath = () => {
       const { userHome, execDir } = $core.options
+      if (isDev()) {
+        //! 开发时 配置目录改成开发目录下的.config
+        const devConfigPath = path.join(CWD(), '.config')
+        if (!fs.existsSync(devConfigPath)) {
+          fs.mkdirSync(devConfigPath, { recursive: true })
+        }
+        return path.join(devConfigPath, CONFIG_FILE_NAME)
+      }
       //fixme: 冰点还原默认为执行路径的上一级，也就是软件安装目录的统计目录（这边暂时不考虑除win以外的系统）
       const deepFreezeConfigPath = path.join(execDir, '../', CONFIG_FILE_NAME)
       if (fs.existsSync(deepFreezeConfigPath)) {

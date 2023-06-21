@@ -2,6 +2,10 @@ export const isPackaged = () => {
   return process.env.ELECTRON_IS_PACKAGED === 'true'
 }
 
+export const CWD = () => {
+  return process.env.INIT_CWD || process.cwd()
+}
+
 /**
  * 是否为开发环境
  */

@@ -29,3 +29,4 @@ lerna-debug.log*
 out
 logs
 builder-out
+.config

@@ -3,6 +3,7 @@ import Core from '../core'
 import useMainServer from '../hooks/useMainServer'
 import useMainWindow from '../hooks/useMainWindow'
 import useWebRequest from '../hooks/useWebRequest'
+import { isMainServerProd } from '../ps'
 import getPort from '../utils/getPort'
 import { CorePlugin } from './corePlugin'
 export default class CoreMainWindowPlugin implements CorePlugin {
@@ -192,7 +193,10 @@ export default class CoreMainWindowPlugin implements CorePlugin {
         stage: 9999
       },
       () => {
-        $core.mainLogger.info('客户端启动配置', $core.config)
+        $core.mainLogger.info(
+          '客户端启动配置',
+          JSON.stringify($core.config, null, isMainServerProd() ? 0 : 2)
+        )
         $core.updateConfigFile()
         $core.mainLogger.info(
           `$core ${this.name} afterCreateMainWindow called successfully`
