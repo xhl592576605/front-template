@@ -7,7 +7,7 @@ export default (core: Core) => {
   /** 根据配置创建主服务 */
   const createMainServer = () => {
     const { homeDir } = core.options
-    const { remoteUrl, developmentMode } = core.config
+    const { remoteUrl, developmentMode, mainServer } = core.config
     const { default: selectMode, mode } = developmentMode
     const modeInfo = mode[selectMode]
 
@@ -21,10 +21,12 @@ export default (core: Core) => {
       loadMainUrl(type, url)
       return
     }
+    // node生产环境
     if (isProd()) {
       loadLocalWeb('html')
       return
     }
+    // node开发环境
     let staticDir = undefined
     if (selectMode == 'html') {
       staticDir = path.join(homeDir, 'frontend', 'dist')
@@ -54,10 +56,17 @@ export default (core: Core) => {
     core.mainWindow.loadURL(url, mainServerOpt)
   }
 
+  /**
+   * 根据静态目录启动一个静态资源服务器
+   * @param mode
+   * @param staticDir
+   * @param hostInfo
+   */
   const loadLocalWeb = (
     mode: string,
     staticDir?: string,
     hostInfo?: {
+      staticDir?: string
       protocol: string
       hostname: string
       indexPage?: string
@@ -70,10 +79,16 @@ export default (core: Core) => {
   ) => {
     const { baseDir } = core.options
     if (!staticDir) {
+      // 如果没有给 默认拿项目运行目录下的public/dist
       staticDir = path.join(baseDir, 'public', 'dist')
     }
+    const { mainServer, mainServerEnv } = core.config
     if (!hostInfo) {
-      hostInfo = core.config.mainServer
+      hostInfo = mainServer
+    }
+    if (hostInfo?.staticDir) {
+      // 如果有说 主服务指定哪个静态文件夹，就用该静态文件夹，这个可以将主服务剥离asar出来
+      staticDir = path.join(hostInfo.staticDir, mainServerEnv)
     }
     const {
       protocol = 'http://',

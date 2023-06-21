@@ -46,6 +46,7 @@ export interface ApplicationConfig {
       key: string
       cert: string
     }
+    staticDir?: string
     options?: LoadURLOptions
   }
   mainServerEnv:
