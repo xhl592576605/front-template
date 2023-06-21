@@ -17,7 +17,8 @@ module.exports = {
     '!.husky/**/*',
     '!script/**/*',
     '!docs/**/*',
-    'public/**/*'
+    'public/**/*',
+    '!native/**/*',
   ],
   extraResources: {
     from: './build/extraResources/',

@@ -50,24 +50,8 @@ export default ($core: Core) => {
     },
     logger: {
       dir: $core.options.logs,
-      log: {
-        main: {
-          fileName: 'main.log',
-          level: 'info'
-        },
-        net: {
-          fileName: 'net.log',
-          level: 'info'
-        },
-        renderer: {
-          fileName: 'renderer.log',
-          level: 'info'
-        },
-        webView: {
-          fileName: 'webView.log',
-          level: 'info'
-        }
-      }
+      fileName: 'main.log',
+      level: 'info'
     },
     preloadPath
   }

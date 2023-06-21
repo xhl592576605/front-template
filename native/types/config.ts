@@ -68,22 +68,13 @@ export interface ApplicationConfig {
   }
   logger: {
     dir: string
-    log: {
-      main: LoggerOption
-      net: LoggerOption
-      renderer: LoggerOption
-      webView: LoggerOption
-    }
+    fileName: string
+    maxSize?: number
+    level?: LevelOption
+    format?: string
+    console?: boolean
   }
   preloadPath: string
-}
-
-export type LoggerOption = {
-  fileName: string
-  maxSize?: number
-  level?: LevelOption
-  format?: string
-  console?: boolean
 }
 
 export enum DevelopmentMode {

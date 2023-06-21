@@ -1,4 +1,4 @@
-import { ElectronLog } from 'electron-log'
+import { ElectronLog, LogFunctions } from 'electron-log'
 import { ApplicationConfig } from '../types/config'
 
 export default class BaseCore {
@@ -13,14 +13,16 @@ export default class BaseCore {
   /** 更新配置文件到本地 */
   declare updateConfigFile: () => void
 
+  /** 日志记录对象 */
+  declare logger: ElectronLog
   /** 主进程日志记录对象 */
-  declare readonly mainLogger: ElectronLog
+  declare mainLogger: LogFunctions
   /** 网络请求日志记录对象 */
-  declare readonly netLogger: ElectronLog
+  declare netLogger: LogFunctions
   /** 渲染进程日志记录对象 */
-  declare readonly rendererLogger: ElectronLog
+  declare rendererLogger: LogFunctions
   /** webview日志记录对象 */
-  declare readonly webViewLogger: ElectronLog
+  declare webViewLogger: LogFunctions
 
   /**
    * 上报日志

@@ -4,12 +4,14 @@ import {
   OnErrorOccurredListenerDetails,
   OnSendHeadersListenerDetails
 } from 'electron'
-import { ElectronLog } from 'electron-log'
+import { ElectronLog, LogFunctions } from 'electron-log'
 import fs from 'fs'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
+import { v4 as createUUID } from 'uuid'
 import Core from '../core'
 import * as Exception from '../exception'
+import { isMainServerProd } from '../ps'
 import createLogger from '../utils/logger'
 import { CorePlugin } from './corePlugin'
 
@@ -65,12 +67,15 @@ export default class CoreLoggerPlugin implements CorePlugin {
       if (!fs.existsSync(logPath)) {
         fs.mkdirSync(logPath, { recursive: true })
       }
-      Object.entries($core.config.logger.log).forEach(([key, value]) => {
-        ;($core as any)[`${key}Logger`] = createLogger(key, {
-          logPath,
-          ...value
-        })
+      $core.logger = createLogger('main', {
+        logPath,
+        ...$core.config.logger
       })
+      $core.mainLogger = $core.logger.scope('main')
+      $core.netLogger = $core.logger.scope('net')
+      $core.rendererLogger = $core.logger.scope('renderer')
+      $core.webViewLogger = $core.logger.scope('webview')
+
       $core.mainLogger.info(
         `$core ${this.name} plugin awaitInitLogger called successfully`
       )
@@ -100,7 +105,10 @@ export default class CoreLoggerPlugin implements CorePlugin {
         ...complete,
         ...error
       }
-      $core.netLogger.log(logObj.statusCode, JSON.stringify(logObj, null, 0),'\n')
+      $core.netLogger.log(
+        logObj.statusCode,
+        JSON.stringify(logObj, null, isMainServerProd() ? 0 : 2)
+      )
       netLogObjMap.delete(id)
     }
 
@@ -118,6 +126,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
         if (uploadData) {
           const bytes = uploadData[0].bytes
           const decoder = new TextDecoder('utf-8')
+          // fixme:需要进行加密
           logObj.uploadDataStr = decoder.decode(bytes)
         }
         const netLogObj: NetLogObj = {
@@ -127,7 +136,23 @@ export default class CoreLoggerPlugin implements CorePlugin {
         return callbackResponse
       }
     )
-
+    $core.lifeCycle.awaitWebRequestOnBeforeSendHeaders.tapPromise(
+      loggerKeyObj,
+      async (beforeSendResponse, detail, core) => {
+        beforeSendResponse.requestHeaders = {
+          ...beforeSendResponse.requestHeaders,
+          'Electron-Client-Name': $core.options.appName,
+          'Electron-Client-Version': $core.options.appVersion,
+          'Electron-Client-Platform': $core.options.platform,
+          'Electron-Client-Mac': $core.options.mac,
+          'Electron-Client-Arch': $core.options.arch,
+          'Electron-Client-Ip': $core.options.ip,
+          'Electron-Client-MainServerEnv': $core.config.mainServerEnv,
+          'Electron-Client-WebRequest-UUID': `${createUUID()}_${detail.id}`
+        }
+        return beforeSendResponse
+      }
+    )
     $core.lifeCycle.awaitWebRequestOnSendHeaders.tapPromise(
       loggerKeyObj,
       async (details) => {
@@ -228,7 +253,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
      * @param message
      */
     const logConsoleMessage = (
-      logger: ElectronLog,
+      logger: ElectronLog | LogFunctions,
       level: number,
       message: string
     ) => {

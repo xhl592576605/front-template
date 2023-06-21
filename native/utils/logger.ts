@@ -52,7 +52,7 @@ export default (logId: string, option: CreateLoggerOption) => {
   option.format
     ? (logger.transports.file.format = option.format)
     : (logger.transports.file.format =
-        '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}')
+        '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}')
   option.level
     ? (logger.transports.file.level = option.level)
     : (logger.transports.file.level = 'debug')
