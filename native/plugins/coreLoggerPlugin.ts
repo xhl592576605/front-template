@@ -14,6 +14,7 @@ import * as Exception from '../exception'
 import { isMainServerProd } from '../ps'
 import createLogger from '../utils/logger'
 import { CorePlugin } from './corePlugin'
+import { encrypt } from '../utils/crypto'
 
 export type BeforeRequestLogObj = Omit<
   OnBeforeRequestListenerDetails,
@@ -107,7 +108,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
       }
       $core.netLogger.log(
         logObj.statusCode,
-        JSON.stringify(logObj, null, isMainServerProd() ? 0 : 2)
+        JSON.stringify(logObj, null, isMainServerProd() ? 0 : 2) + '\n'
       )
       netLogObjMap.delete(id)
     }
@@ -126,8 +127,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
         if (uploadData) {
           const bytes = uploadData[0].bytes
           const decoder = new TextDecoder('utf-8')
-          // fixme:需要进行加密
-          logObj.uploadDataStr = decoder.decode(bytes)
+          logObj.uploadDataStr = encrypt(decoder.decode(bytes), id.toString())
         }
         const netLogObj: NetLogObj = {
           beforeRequest: logObj as BeforeRequestLogObj

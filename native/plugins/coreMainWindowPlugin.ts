@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { BrowserWindow, app } from 'electron'
 import Core from '../core'
 import useMainServer from '../hooks/useMainServer'
 import useMainWindow from '../hooks/useMainWindow'
@@ -79,6 +79,9 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * 创建主窗口
      */
     const createMainWindow = async () => {
+      if ($core.mainWindow) {
+        ;($core.mainWindow as any) = null
+      }
       const mainWindow = getMainWindow()
       $core.mainWindow = mainWindow!
       await createMainServer()
@@ -106,8 +109,17 @@ export default class CoreMainWindowPlugin implements CorePlugin {
      * 还原窗口
      */
     const restoreMainWindow = () => {
-      if ($core.mainWindow) {
-        if ($core.mainWindow.isMinimized()) $core.mainWindow.restore()
+      const { mainWindow } = $core
+      if (mainWindow) {
+        if (mainWindow.isDestroyed()) {
+          $core.mainLogger.info(
+            'restoreMainWindow check mainWindow is destroyed and create again'
+          )
+          createMainWindow()
+          $core.mainWindow.show()
+        } else if (mainWindow.isMinimized()) {
+          mainWindow.restore()
+        }
         $core.mainWindow.focus()
       }
     }

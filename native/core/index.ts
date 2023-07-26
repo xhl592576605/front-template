@@ -7,6 +7,7 @@ import { CoreOptions, Options } from '../types/coreOptions'
 import getmac from '../utils/getMac'
 import BaseCore from './baseCore'
 import LifeCycle from './lifeCycle'
+import { SOURCE_CODE_DIR_NAME } from '../ps'
 
 class Core extends BaseCore {
   private debug = debug('core')
@@ -108,7 +109,7 @@ class Core extends BaseCore {
       options.isPackaged
     ) {
       options.execDir = path.dirname(app.getPath('exe'))
-      options.baseDir = path.join(app.getAppPath(), 'out')
+      options.baseDir = path.join(app.getAppPath(), SOURCE_CODE_DIR_NAME)
     }
     if (!options.isPackaged) {
       options.homeDir = path.join(options.homeDir, '../')

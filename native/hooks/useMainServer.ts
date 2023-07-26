@@ -6,6 +6,10 @@ import createKoaApp from '../utils/createKoaApp'
 export default (core: Core) => {
   /** 根据配置创建主服务 */
   const createMainServer = () => {
+    if (core.mainServer) {
+      core.mainServer.close()
+      core.mainServer = null
+    }
     const { homeDir } = core.options
     const { remoteUrl, developmentMode, mainServer } = core.config
     const { default: selectMode, mode } = developmentMode
@@ -101,7 +105,8 @@ export default (core: Core) => {
     if (mode === 'html') {
       url = `${url}/${indexPage}`
     }
-    createKoaApp(staticDir, port, protocol, ssl).then(() => {
+    createKoaApp(staticDir, port, protocol, ssl).then(({ server }) => {
+      core.mainServer = server
       core.mainLogger?.info(`mainServer staticDir:${staticDir}`)
       loadMainUrl(mode, url)
     })

@@ -26,7 +26,7 @@ lerna-debug.log*
 .vscode
 
 # out
-out
+native-out
 logs
 builder-out
 .config

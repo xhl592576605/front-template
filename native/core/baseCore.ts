@@ -1,6 +1,7 @@
 import { ElectronLog, LogFunctions } from 'electron-log'
 import { ApplicationConfig } from '../types/config'
-
+import { Server as HttpServer } from 'http'
+import { Server as HttpsServer } from 'https'
 export default class BaseCore {
   /**
    * 定义一些虚拟方法，在对应的插件进行实现
@@ -67,4 +68,6 @@ export default class BaseCore {
       | 'prod'
       | 'production'
   ) => void
+
+  declare mainServer: HttpServer | HttpsServer | null
 }

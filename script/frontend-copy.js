@@ -4,7 +4,7 @@ const { promisify } = require('util')
 const { ncp } = require('ncp')
 const CWD = process.cwd() || process.env.INIT_CWD
 
-const publicDir = path.join(CWD, 'out', 'public', 'dist')
+const publicDir = path.join(CWD, 'native-out', 'public', 'dist')
 const frontendDistDir = path.join(CWD, 'frontend', 'dist')
 const mkdir = promisify(fs.mkdir)
 const copy = promisify(ncp)

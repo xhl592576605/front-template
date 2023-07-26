@@ -31,11 +31,14 @@ export default (core: Core) => {
   const getMainWindow = () => {
     if (!mainWindow) {
       mainWindow = createWindow()
+      mainWindow.on('closed', () => {
+        mainWindow = null;
+      })
     }
     return mainWindow
   }
 
   return {
-    getMainWindow
+    getMainWindow,
   }
 }
