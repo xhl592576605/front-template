@@ -10,11 +10,15 @@
     <h1>Hello Word!</h1>
   </body>
   <script>
-    window.Electron.Core.getCoreConfig().then((result) => {
+    Promise.all([
+      window.Electron.Core.getCoreConfig(),
+      window.Electron.Core.getCoreOption()
+    ]).then(([config, option]) => {
       const webview = document.createElement('webview')
-      webview.src =
-        'https://tower.im/projects/9ec7c8f191bcbc3fd38b2450a579769a/list/todos/'
-      webview.preload = `file://${result.preloadPath}`
+      webview.src = 'https://www.baidu.com/'
+      webview.preload = !option.isPackaged
+        ? `file://${config.preloadPath}`
+        : config.preloadPath
       webview.style = 'width: 100%; height: 400px'
       webview.setAttribute('nodeIntegration', 'nodeIntegration')
       webview.addEventListener('dom-ready', () => {

@@ -1,10 +1,16 @@
 import path from 'path'
 import Core from '../core'
+import { SOURCE_CODE_DIR_NAME } from '../ps'
 import { ApplicationConfig, DevelopmentMode } from '../types/config'
 
 export default ($core: Core) => {
-  const preloadPath = path.join($core.options.baseDir, 'preload/index.js')
-
+  const basePreloadPath = path.join($core.options.baseDir, 'preload/index.js')
+  const preloadPath = !$core.options.isPackaged
+    ? basePreloadPath
+    : path.join(
+        $core.options.homeDir,
+        `${SOURCE_CODE_DIR_NAME}/preload/index.js`
+      )
   const config: ApplicationConfig = {
     developmentMode: {
       default: DevelopmentMode.html,
@@ -39,8 +45,8 @@ export default ($core: Core) => {
         minWidth: 800,
         minHeight: 650,
         webPreferences: {
-          nodeIntegration:true,// Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
-          preload: preloadPath,
+          nodeIntegration: true, // Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+          preload: path.join($core.options.baseDir, 'preload/index.js'),
           webviewTag: true
         },
         show: false // * 后续如果一启动要显示窗口，可以改为true
