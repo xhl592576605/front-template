@@ -3,6 +3,9 @@ import { IpcMainChannel, IpcWebContentChannel } from './ipcChannel'
 import AppIpc from './ipcMethod/appIpc'
 import CoreIpc from './ipcMethod/coreIpc'
 
+/** 环境标识位 */
+contextBridge.exposeInMainWorld('__ELECTRON__', true)
+
 /**
  * 为渲染进程提供的api，可以在渲染进程中使用，若是模块提供的方法可以像Core，App一样添加
  */
@@ -23,12 +26,33 @@ contextBridge.exposeInMainWorld('Electron', {
   addEventListener: (channel: string, listener: (...args: any[]) => void) =>
     ipcRenderer.on(channel, listener),
   /**
+   * 移除来自主进程的特定监听
+   * @param channel
+   * @returns
+   */
+  removeEventListener: (
+    channel: string,
+    listener: (...args: any[]) => void
+  ) => {
+    ipcRenderer.removeListener(channel, listener)
+  },
+  /**
    * 移除来自主进程的监听
    * @param channel
    * @returns
    */
-  removeEventListener: (channel: string) =>
+  removeEventAllListener: (channel: string) =>
     ipcRenderer.removeAllListeners(channel),
+
+  /**
+   * 发送到 host 页面上的 <webview> 元素，而不是主进程。
+   * @param channel
+   * @param args
+   * @returns
+   */
+  sendToHost: (channel: string, ...args: any[]) =>
+    ipcRenderer.sendToHost(channel, ...args),
+
   /**
    * 主进程的监听事件
    */

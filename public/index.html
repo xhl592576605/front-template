@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<body>
-		<h1>Hello Word!</h1>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello Word!</h1>
+  </body>
+  <script>
+    window.Electron.Core.getCoreConfig().then((result) => {
+      const webview = document.createElement('webview')
+      webview.src =
+        'https://tower.im/projects/9ec7c8f191bcbc3fd38b2450a579769a/list/todos/'
+      webview.preload = `file://${result.preloadPath}`
+      webview.style = 'width: 100%; height: 400px'
+      webview.setAttribute('nodeIntegration', 'nodeIntegration')
+      webview.addEventListener('dom-ready', () => {
+        webview.openDevTools()
+      })
+      document.body.appendChild(webview)
+    })
+  </script>
+  <script>
+    console.log(window.__ELECTRON__)
+    window.Electron.addEventListener(
+      window.Electron.IpcWebContentChannel.App.NET_STATUS,
+      (event, netStatus, a) => {
+        console.log(
+          window.Electron.IpcWebContentChannel.App.NET_STATUS,
+          JSON.stringify(netStatus),
+          JSON.stringify(a)
+        )
+      }
+    )
+  </script>
 </html>
