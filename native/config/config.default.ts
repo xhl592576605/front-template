@@ -39,11 +39,11 @@ export default ($core: Core) => {
         minWidth: 800,
         minHeight: 650,
         webPreferences: {
-          // nodeIntegration:true, Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+          nodeIntegration:true,// Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
           preload: preloadPath,
           webviewTag: true
         },
-        show: true
+        show: false // * 后续如果一启动要显示窗口，可以改为true
       },
       openDevTools: true,
       openAppMenu: true

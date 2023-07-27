@@ -4,6 +4,7 @@ import merge from 'lodash/merge'
 import path from 'path'
 import yaml from 'yaml'
 import Core from '../core'
+import { IpcMainChannel } from '../preload/ipcChannel'
 import { CWD, isDev } from '../ps'
 import { ApplicationConfig } from '../types/config'
 import loadModule from '../utils/loadModule'
@@ -75,7 +76,6 @@ export default class CoreConfigPlugin implements CorePlugin {
      */
     const getInnerConfig = () => {
       const { env, baseDir } = $core.options
-      // todo: 如何调试 如何让读取app.asar内部文件
 
       // 1. 获取内置默认配置文件
       const defaultConfig =
@@ -123,6 +123,15 @@ export default class CoreConfigPlugin implements CorePlugin {
     $core.lifeCycle.afterGetConfig.tap(this.name, () => {
       // 更新配置文件
       updateConfigFile()
+    })
+
+    $core.lifeCycle.afterCreateMainWindow.tap(this.name, async () => {
+      $core.addIpcMainListener(
+        IpcMainChannel.Core.GET_CONFIG,
+        async () => {
+          return $core.config
+        }
+      )
     })
   }
 }

@@ -3,11 +3,11 @@ import { app } from 'electron'
 import merge from 'lodash/merge'
 import path from 'path'
 import CorePlugins, { CorePlugin } from '../plugins'
+import { SOURCE_CODE_DIR_NAME } from '../ps'
 import { CoreOptions, Options } from '../types/coreOptions'
 import getmac from '../utils/getMac'
 import BaseCore from './baseCore'
 import LifeCycle from './lifeCycle'
-import { SOURCE_CODE_DIR_NAME } from '../ps'
 
 class Core extends BaseCore {
   private debug = debug('core')

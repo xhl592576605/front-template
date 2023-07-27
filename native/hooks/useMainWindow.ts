@@ -16,7 +16,7 @@ export default (core: Core) => {
     const { isPackaged } = core.options
     if (!isPackaged && openDevTools) {
       win.webContents.openDevTools({
-        mode: 'undocked',
+        mode: 'right',
         activate: false
       })
     }

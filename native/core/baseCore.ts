@@ -1,7 +1,7 @@
 import { ElectronLog, LogFunctions } from 'electron-log'
-import { ApplicationConfig } from '../types/config'
 import { Server as HttpServer } from 'http'
 import { Server as HttpsServer } from 'https'
+import { ApplicationConfig } from '../types/config'
 export default class BaseCore {
   /**
    * 定义一些虚拟方法，在对应的插件进行实现
@@ -53,8 +53,20 @@ export default class BaseCore {
   /** 应用重启 */
   declare appRelaunch: () => void
 
+  /** 关闭软件 */
+  declare appClose: () => void
+
   /** 还原窗口 */
   declare restoreMainWindow: () => void
+
+  /** 窗口最大化 */
+  declare maximize: () => void
+
+  /** 窗口最小化 */
+  declare minimize: () => void
+
+  /** 窗口全屏 */
+  declare fullScreen: (isFullScreen: boolean) => void
 
   /** 切换主服务页面环境 */
   declare changeMainServerEnv: (
@@ -70,4 +82,18 @@ export default class BaseCore {
   ) => void
 
   declare mainServer: HttpServer | HttpsServer | null
+
+  declare addIpcMainListener: (
+    channel: string,
+    listener: (...args: any[]) => void
+  ) => void
+
+  declare addIpcMainListenerOnce: (
+    channel: string,
+    listener: (...args: any[]) => void
+  ) => void
+
+  declare removeIpcMainListener: (channel: string) => void
+
+  declare sendToIpcRenderer: (channel: string, ...args: any[]) => void
 }

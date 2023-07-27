@@ -12,21 +12,19 @@ const checkBranchMaster = () => {
     shell.cd(basePath)
     let branch = shell.exec('git branch | grep "*"', { silent: true }).stdout
     branch = branch.replace('*', '').trim()
-    // todo 临时处理成electron-senior 后续要改成electron-senior
-    if (branch !== 'electron-senior') {
+    if (branch !== 'master') {
       reject('不是处于master分支')
       return
     }
     log.info(`${branch}: 拉取最新代码`)
     shell.exec(`git pull origin ${branch}`)
 
-    // todo 临时处理成 注释文档
-    // const statusLength =
-    //   shell.exec('git status -s').stdout.split('\n').length - 1
-    // if (statusLength > 0) {
-    //   reject('请保证分支没有任何修改')
-    //   return
-    // }
+    const statusLength =
+      shell.exec('git status -s').stdout.split('\n').length - 1
+    if (statusLength > 0) {
+      reject('请保证分支没有任何修改')
+      return
+    }
     log.info(`拉取tags`)
     shell.exec('git fetch --tags', { silent: true })
     const lastTag = shell

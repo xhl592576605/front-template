@@ -1,36 +1,48 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
+import { IpcMainChannel, IpcWebContentChannel } from './ipcChannel'
+import AppIpc from './ipcMethod/appIpc'
+import CoreIpc from './ipcMethod/coreIpc'
 
-contextBridge.exposeInMainWorld('WebViewJavascriptBridge', {
+/**
+ * 为渲染进程提供的api，可以在渲染进程中使用，若是模块提供的方法可以像Core，App一样添加
+ */
+contextBridge.exposeInMainWorld('Electron', {
   /**
-   * 注册渲染进程事件（回调函数方式）
-   * @param key
-   * @param callBack
+   * 检查主进程是否注册了某个channel
+   * @param channel
+   * @returns
    */
-  registerHandler: (key: string, callBack: () => void) => {},
+  checkJsIpc: (channel: string) =>
+    ipcRenderer.invoke(IpcMainChannel.CHECK_JS_IPC, channel),
   /**
-   * 触发事件，默认主进程，所有渲染进程接收，可以加个枚举参数指定（回调函数方式）
-   * @param key
-   * @param params
-   * @param callBack
+   * 注册来自主进程的监听
+   * @param channel
+   * @param listener
+   * @returns
    */
-  callHandler: (key: string, params: any, callBack: () => void) => {},
+  addEventListener: (channel: string, listener: (...args: any[]) => void) =>
+    ipcRenderer.on(channel, listener),
   /**
-   * 注册渲染进程事件（异步方式）
-   * @param key
-   * @param callBack
+   * 移除来自主进程的监听
+   * @param channel
+   * @returns
    */
-  tapPromise: (key: string, callBack: () => void) => {},
+  removeEventListener: (channel: string) =>
+    ipcRenderer.removeAllListeners(channel),
   /**
-   * 触发事件，默认主进程，所有渲染进程接收，可以加个枚举参数指定（异步方式）
-   * @param key
-   * @param params
+   * 主进程的监听事件
    */
-  promise: (key: string, ...params: any) => {},
-
+  IpcMainChannel,
   /**
-   * 渲染进程可以监听的所有key值
+   * 主进程发送到渲染进程的事件
    */
-  TAP_KEYS: {},
-  /**主进程暴露出的所有key值 */
-  PROMISE_KEY: {}
+  IpcWebContentChannel,
+  /**
+   * 核心方法
+   */
+  Core: CoreIpc,
+  /**
+   * APP方法
+   */
+  App: AppIpc
 })

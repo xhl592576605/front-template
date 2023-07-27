@@ -4,6 +4,7 @@
   "ext": "ts,json",
   "verbose": true,
   "exec": "npm run electron:dev",
+  "delay": 1000,
   "restartable": "hr",
   "colours": true,
   "events": {}

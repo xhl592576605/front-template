@@ -1,8 +1,10 @@
-import { BrowserWindow, app } from 'electron'
+import { app } from 'electron'
+import _ from 'lodash'
 import Core from '../core'
 import useMainServer from '../hooks/useMainServer'
 import useMainWindow from '../hooks/useMainWindow'
 import useWebRequest from '../hooks/useWebRequest'
+import { IpcMainChannel } from '../preload/ipcChannel'
 import { isMainServerProd } from '../ps'
 import getPort from '../utils/getPort'
 import { CorePlugin } from './corePlugin'
@@ -105,22 +107,57 @@ export default class CoreMainWindowPlugin implements CorePlugin {
       app.relaunch()
       app.exit()
     }
+
+    /**
+     * 关闭，不退出应用，window除外
+     */
+    const appClose = () => {
+      if ($core.mainWindow) {
+        $core.mainWindow.close()
+        $core.mainLogger.info('app mainWindow close')
+      }
+    }
+
+    /**
+     * 全屏
+     */
+    const fullScreen = (isFullScreen: boolean) => {
+      if ($core.mainWindow) {
+        $core.mainWindow.setFullScreen(isFullScreen)
+        $core.mainLogger.info(`app mainWindow setFullScreen:${isFullScreen}`)
+      }
+    }
+
     /**
      * 还原窗口
      */
     const restoreMainWindow = () => {
-      const { mainWindow } = $core
-      if (mainWindow) {
-        if (mainWindow.isDestroyed()) {
+      if ($core.mainWindow) {
+        if ($core.mainWindow.isDestroyed()) {
           $core.mainLogger.info(
             'restoreMainWindow check mainWindow is destroyed and create again'
           )
           createMainWindow()
-          $core.mainWindow.show()
-        } else if (mainWindow.isMinimized()) {
-          mainWindow.restore()
+        } else if ($core.mainWindow.isMinimized()) {
+          $core.mainWindow.restore()
         }
+        $core.mainWindow.show()
         $core.mainWindow.focus()
+      }
+    }
+
+    /** 窗口最大化 */
+    const maximize = () => {
+      if ($core.mainWindow) {
+        $core.mainWindow.maximize()
+        $core.mainLogger.info('app mainWindow maximize')
+      }
+    }
+    /** 窗口最小化 */
+    const minimize = () => {
+      if ($core.mainWindow) {
+        $core.mainWindow.minimize()
+        $core.mainLogger.info('app mainWindow minimize')
       }
     }
 
@@ -139,6 +176,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
         | 'prod'
         | 'production'
     ) => {
+      $core.mainLogger.info(`app changeMainServerEnv:${env}`)
       $core.config.mainServerEnv = env
       $core.updateConfigFile()
       $core.appRelaunch()
@@ -182,7 +220,11 @@ export default class CoreMainWindowPlugin implements CorePlugin {
           registerWebRequestIntercept()
           $core.appQuit = appQuit.bind($core)
           $core.appRelaunch = appRelaunch.bind($core)
+          $core.appClose = appClose.bind($core)
           $core.restoreMainWindow = restoreMainWindow.bind($core)
+          $core.maximize = maximize.bind($core)
+          $core.minimize = minimize.bind($core)
+          $core.fullScreen = fullScreen.bind($core)
           $core.changeMainServerEnv = changeMainServerEnv.bind($core)
           $core.mainLogger.info(
             `$core ${this.name} awaitCreateMainWindow called successfully`
@@ -212,6 +254,38 @@ export default class CoreMainWindowPlugin implements CorePlugin {
         $core.updateConfigFile()
         $core.mainLogger.info(
           `$core ${this.name} afterCreateMainWindow called successfully`
+        )
+      }
+    )
+    /**
+     * 最后更新下配置文件到本地
+     */
+    $core.lifeCycle.afterCreateMainWindow.tap(
+      {
+        name: this.name,
+        stage: 9999
+      },
+      () => {
+        $core.addIpcMainListener(IpcMainChannel.Core.GET_OPTIONS, () =>
+          _.omit($core.options, ['plugins'])
+        )
+        $core.addIpcMainListener(
+          IpcMainChannel.Core.CHANGE_MAIN_SERVER_ENV,
+          $core.changeMainServerEnv
+        )
+
+        $core.addIpcMainListener(IpcMainChannel.App.QUIT, $core.appQuit)
+        $core.addIpcMainListener(IpcMainChannel.App.RELAUNCH, $core.appRelaunch)
+        $core.addIpcMainListener(IpcMainChannel.App.CLOSE, $core.appClose)
+        $core.addIpcMainListener(IpcMainChannel.App.MAXIMIZE, $core.maximize)
+        $core.addIpcMainListener(IpcMainChannel.App.MINIMIZE, $core.minimize)
+        $core.addIpcMainListener(
+          IpcMainChannel.App.FULLSCREEN,
+          (e, iFullScreen: boolean = true) => $core.fullScreen(iFullScreen)
+        )
+        $core.addIpcMainListener(
+          IpcMainChannel.App.RESTORE_MAIN_WINDOW,
+          $core.restoreMainWindow
         )
       }
     )
