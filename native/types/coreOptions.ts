@@ -6,9 +6,9 @@ import { CorePlugin } from '../plugins/corePlugin'
 export interface CoreOptions extends Options {
   env: 'dev' | 'devp' | 'develop' | 'development' | 'prod' | 'production'
   platform: Platform
-  arch: Architecture,
+  arch: Architecture
   mac: string
-  ip: string,
+  ip: string
   baseDir: string
   homeDir: string
   appName: string

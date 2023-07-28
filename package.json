@@ -37,7 +37,9 @@
     "build-lr-64": "electron-builder -l=rpm --x64 --config ./script/build/config/linux.js ",
     "build-lp-64": "electron-builder -l=pacman --x64 --config ./script/build/config/linux.js ",
     "cz": "cz",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "prepare": "husky install",
+    "changelog": "conventional-changelog -p GitHub -i CHANGELOG.md -s -r 0"
   },
   "keywords": [],
   "license": "ISC",
@@ -59,14 +61,15 @@
     "chalk": "^4.1.0",
     "clear-console": "^1.1.0",
     "commitizen": "^4.3.0",
+    "conventional-changelog-cli": "^3.0.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "electron": "^22.3.6",
     "electron-builder": "^23.6.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.3",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^7.0.0",
     "inquirer": "^7.3.3",
     "ncp": "^2.0.0",
     "nodemon": "^2.0.22",
@@ -93,7 +96,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "node_modules/cz-customizable"
     }
   }
 }

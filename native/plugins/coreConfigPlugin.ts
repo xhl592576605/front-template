@@ -126,12 +126,9 @@ export default class CoreConfigPlugin implements CorePlugin {
     })
 
     $core.lifeCycle.afterCreateMainWindow.tap(this.name, async () => {
-      $core.addIpcMainListener(
-        IpcMainChannel.Core.GET_CONFIG,
-        async () => {
-          return $core.config
-        }
-      )
+      $core.addIpcMainListener(IpcMainChannel.Core.GET_CONFIG, async () => {
+        return $core.config
+      })
     })
   }
 }

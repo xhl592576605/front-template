@@ -25,7 +25,7 @@ export default (iface?: string): NetworkInterfaceInfoIPv4 => {
     }
     throw new Error(`interface ${iface} had no valid mac addresses`)
   } else {
-    for (const [key, parts] of Object.entries(list)) {
+    for (const [, parts] of Object.entries(list)) {
       // for some reason beyond me, this is needed to satisfy typescript
       // fix https://github.com/bevry/getmac/issues/100
       if (!parts) continue
