@@ -33,7 +33,6 @@ export default (logId: string, option: CreateLoggerOption) => {
   option.archiveLog
     ? (logger.transports.file.archiveLog = option.archiveLog)
     : (logger.transports.file.archiveLog = (file) => {
-        const date = new Date()
         const info = path.parse(file.path)
 
         try {

@@ -12,9 +12,9 @@ import { v4 as createUUID } from 'uuid'
 import Core from '../core'
 import * as Exception from '../exception'
 import { isMainServerProd } from '../ps'
+import { encrypt } from '../utils/crypto'
 import createLogger from '../utils/logger'
 import { CorePlugin } from './corePlugin'
-import { encrypt } from '../utils/crypto'
 
 export type BeforeRequestLogObj = Omit<
   OnBeforeRequestListenerDetails,
@@ -124,10 +124,11 @@ export default class CoreLoggerPlugin implements CorePlugin {
           'uploadData'
         ])
 
-        if (uploadData) {
+        if (uploadData && uploadData.length > 0) {
           const bytes = uploadData[0].bytes
           const decoder = new TextDecoder('utf-8')
-          logObj.uploadDataStr = encrypt(decoder.decode(bytes), id.toString())
+          const uploadDataStr = decoder.decode(bytes)
+          logObj.uploadDataStr = encrypt(uploadDataStr, id.toString())
         }
         const netLogObj: NetLogObj = {
           beforeRequest: logObj as BeforeRequestLogObj

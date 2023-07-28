@@ -62,7 +62,8 @@ export default class CoreIpcPlugin implements CorePlugin {
     const sendToIpcRenderer = (channel: string, ...args: any[]) => {
       if ($core.mainWindow) {
         $core.mainLogger.info(
-          `[ipcMain] send to renderer: ${channel},args: ${args}`
+          `[ipcMain] send to renderer: ${channel},args:`,
+          ...args
         )
         $core.mainWindow.webContents.send(channel, ...args)
       }

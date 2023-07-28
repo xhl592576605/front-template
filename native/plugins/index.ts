@@ -1,3 +1,4 @@
+import CoreAutoUpdatePlugin from './coreAutoUpdatePlugin'
 import CoreConfigPlugin from './coreConfigPlugin'
 import CoreIpcPlugin from './coreIpcPlugin'
 import CoreLoggerPlugin from './coreLoggerPlugin'
@@ -8,6 +9,7 @@ export default [
   new CoreConfigPlugin(),
   new CoreLoggerPlugin(),
   new CoreIpcPlugin(),
-  new CoreMainWindowPlugin()
+  new CoreMainWindowPlugin(),
+  new CoreAutoUpdatePlugin()
 ]
 export { CorePlugin }

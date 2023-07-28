@@ -59,7 +59,11 @@ export default ($core: Core) => {
       fileName: 'main.log',
       level: 'info'
     },
-    preloadPath
+    preloadPath,
+    autoUpdate: {
+      provider: 'generic',
+      url: 'http://127.0.0.1:8080'
+    }
   }
 
   return config

@@ -76,6 +76,10 @@ export interface ApplicationConfig {
     console?: boolean
   }
   preloadPath: string
+  autoUpdate?: {
+    provider: string
+    url: string
+  }
 }
 
 export enum DevelopmentMode {

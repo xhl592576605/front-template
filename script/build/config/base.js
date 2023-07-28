@@ -28,6 +28,7 @@ module.exports = {
     '!.eslintrc.js',
     '!.prettierrc.js',
     '!commitlint.config.cjs',
+    '!dev-app-update.yml',
   ],
   extraResources: {
     from: './build/extraResources/',

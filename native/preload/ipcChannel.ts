@@ -25,5 +25,12 @@ export const IpcMainChannel = {
 export const IpcWebContentChannel = {
   App: {
     NET_STATUS: 'app:net-status'
+  },
+  AutoUpdate: {
+    ERROR: 'auto-update:error',
+    CHECKING_FOR_UPDATE: 'auto-update:checking-for-update',
+    UPDATE_AVAILABLE: 'auto-update:update-available',
+    UPDATE_NOT_AVAILABLE: 'auto-update:update-not-available',
+    DOWNLOAD_PROGRESS: 'auto-update:download-progress',
   }
 }

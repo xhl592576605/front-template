@@ -12,4 +12,4 @@ const encrypt = (text: string, secretKey = SecretKey) => {
 const decrypt = (text: string, secretKey = SecretKey) => {
   return AES.decrypt(text, secretKey)
 }
-export { encrypt, decrypt }
+export { decrypt, encrypt }
