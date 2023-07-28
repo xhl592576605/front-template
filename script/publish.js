@@ -169,7 +169,7 @@ const deleteTag = (tag) => {
   })
 }
 
-const buildSoft = ({ tag }) => {
+const buildSoft = ({ branch, tag }) => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
     // const checkOutCode = shell.exec(`git checkout ${tag}`).code
@@ -180,11 +180,12 @@ const buildSoft = ({ tag }) => {
     try {
       log.info('build electron ')
       buildElectron(tag)
-        .then(() => resolve(tag))
+        .then(() => resolve({ branch, tag }))
         .catch((err) => {
-          deleteTag(tag).then(() => {
-            reject('build electron failed: ' + err.message)
-          })
+          reject('build electron failed: ' + err.message)
+          // deleteTag(tag).then(() => {
+          //   reject('build electron failed: ' + err.message)
+          // })
         })
     } catch (e) {
       reject('更新包的版本号失败')
