@@ -172,11 +172,11 @@ const deleteTag = (tag) => {
 const buildSoft = ({ tag }) => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    const checkOutCode = shell.exec(`git checkout ${tag}`).code
-    if (checkOutCode !== 0) {
-      reject(`切换tag ${tag} 失败`)
-      return
-    }
+    // const checkOutCode = shell.exec(`git checkout ${tag}`).code
+    // if (checkOutCode !== 0) {
+    //   reject(`切换tag ${tag} 失败`)
+    //   return
+    // }
     try {
       log.info('build electron ')
       buildElectron(tag)
