@@ -140,12 +140,13 @@ const createTag = ({ branch, tag }) => {
   })
 }
 
-const pushTag = (tag) => {
+const pushTag = ({ tag }) => {
   return new Promise((resolve, reject) => {
     log.info(`push new tag ${tag}`)
     shell.cd(basePath)
     shell.exec(`git push origin ${tag}`, (code) => {
       if (code !== 0) {
+        deleteTag(tag)
         reject(`tag ${tag}: 推送到远端失败`)
         return
       }
@@ -209,7 +210,7 @@ const buildChangeLog = ({ branch, tag }) => {
 const backToMaster = () => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    shell.exec('git checkout electron-senior')
+    shell.exec('git checkout electron-senior') // todo: 后续要改成master
     setTimeout(resolve, 1000)
   })
 }
