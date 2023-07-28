@@ -1,15 +1,11 @@
-## <small>0.0.18 (2023-07-28)</small>
-
-* fix(custom): 测试 ([f64df36](https://github.com/xhl592576605/front-template/commit/f64df36))
-
-
-
 ## <small>0.0.17 (2023-07-28)</small>
 
 * chore: 修改前端页面的copy流程 ([30dee71](https://github.com/xhl592576605/front-template/commit/30dee71))
+* chore(custom): 测试 ([82dd92d](https://github.com/xhl592576605/front-template/commit/82dd92d))
 * chore(custom): 测试发布版本 ([d0ef880](https://github.com/xhl592576605/front-template/commit/d0ef880))
 * chore(custom): 重新约束提交日志的规范 ([9d9ac18](https://github.com/xhl592576605/front-template/commit/9d9ac18))
 * 测试提交钩子 ([5bdb3dd](https://github.com/xhl592576605/front-template/commit/5bdb3dd))
+* add new version 0.0.18 ([307e2a4](https://github.com/xhl592576605/front-template/commit/307e2a4))
 * fix: 测试提交钩子 ([2d10c19](https://github.com/xhl592576605/front-template/commit/2d10c19))
 * fix: 更改了native的编译输出文件夹，修复mac下关闭软件docker栏还在，但是打不开问题 ([8ab97ff](https://github.com/xhl592576605/front-template/commit/8ab97ff))
 * fix: 新增配置插件 ([cc0e9e4](https://github.com/xhl592576605/front-template/commit/cc0e9e4))
@@ -22,6 +18,7 @@
 * fix: 修改部分eslint报警问题 ([f332afd](https://github.com/xhl592576605/front-template/commit/f332afd))
 * fix: 修改传递参数 ([52c83aa](https://github.com/xhl592576605/front-template/commit/52c83aa))
 * fix: 修改文件名称 ([d6f5353](https://github.com/xhl592576605/front-template/commit/d6f5353))
+* fix(custom): 测试 ([f64df36](https://github.com/xhl592576605/front-template/commit/f64df36))
 * feat: 定义JsBridge暴露出去的方法 ([a7f7251](https://github.com/xhl592576605/front-template/commit/a7f7251))
 * feat: 对本地网站服务做一个兼容 ([6818e31](https://github.com/xhl592576605/front-template/commit/6818e31))
 * feat: 将日志变更成一个文件，并增加scope ([9c2da54](https://github.com/xhl592576605/front-template/commit/9c2da54))
