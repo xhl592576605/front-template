@@ -107,5 +107,4 @@ export const processType = () => {
   return type
 }
 
-
-export const SOURCE_CODE_DIR_NAME='native-out'
+export const SOURCE_CODE_DIR_NAME = 'native-out'

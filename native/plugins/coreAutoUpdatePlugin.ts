@@ -11,7 +11,7 @@ import { CorePlugin } from './corePlugin'
 export default class CoreAutoUpdatePlugin implements CorePlugin {
   name = 'core-auto-update-plugin'
   isAutoUpdate: boolean // 是否自动更新
-  constructor(isAutoUpdate: boolean = true) {
+  constructor(isAutoUpdate = true) {
     this.isAutoUpdate = isAutoUpdate
     if (isDev()) {
       // 可以用于开发环境强制去执行检查更新逻辑

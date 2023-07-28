@@ -13,11 +13,11 @@ export default (core: Core) => {
   const registerWebRequestIntercept = () => {
     session.defaultSession.webRequest.onBeforeRequest(
       async (details, callback) => {
-        let callbackResponse: CallbackResponse = {
+        const callbackResponse: CallbackResponse = {
           cancel: false,
           redirectURL: undefined
         }
-        let res = await core.lifeCycle.awaitWebRequestOnBeforeRequest.promise(
+        const res = await core.lifeCycle.awaitWebRequestOnBeforeRequest.promise(
           callbackResponse,
           details,
           core
@@ -34,11 +34,11 @@ export default (core: Core) => {
 
     session.defaultSession.webRequest.onBeforeSendHeaders(
       async (details, callback) => {
-        let beforeSendResponse: BeforeSendResponse = {
+        const beforeSendResponse: BeforeSendResponse = {
           cancel: false,
           requestHeaders: details.requestHeaders
         }
-        let res =
+        const res =
           await core.lifeCycle.awaitWebRequestOnBeforeSendHeaders.promise(
             beforeSendResponse,
             details,
@@ -61,15 +61,16 @@ export default (core: Core) => {
 
     session.defaultSession.webRequest.onHeadersReceived(
       async (details, callback) => {
-        let headersReceivedResponse: HeadersReceivedResponse = {
+        const headersReceivedResponse: HeadersReceivedResponse = {
           cancel: false,
           responseHeaders: details.responseHeaders
         }
-        let res = await core.lifeCycle.awaitWebRequestOnHeadersReceived.promise(
-          headersReceivedResponse,
-          details,
-          core
-        )
+        const res =
+          await core.lifeCycle.awaitWebRequestOnHeadersReceived.promise(
+            headersReceivedResponse,
+            details,
+            core
+          )
         if (!res || (res.cancel && res.responseHeaders)) {
           callback({
             cancel: false,
