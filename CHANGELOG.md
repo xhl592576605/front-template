@@ -1,9 +1,16 @@
+## <small>0.0.19 (2023-07-28)</small>
+
+* fix: 测试 ([b63aa9b](https://github.com/xhl592576605/front-template/commit/b63aa9b))
+
+
+
 ## <small>0.0.18 (2023-07-28)</small>
 
+* add new version 0.0.17 ([36acb5d](https://github.com/xhl592576605/front-template/commit/36acb5d))
+* add new version 0.0.18 ([d4b5400](https://github.com/xhl592576605/front-template/commit/d4b5400))
 * fix: 测试 ([a6c299b](https://github.com/xhl592576605/front-template/commit/a6c299b))
 * fix: 测试 ([0f8e473](https://github.com/xhl592576605/front-template/commit/0f8e473))
 * fix: 测试 ([33f82ec](https://github.com/xhl592576605/front-template/commit/33f82ec))
-* add new version 0.0.17 ([36acb5d](https://github.com/xhl592576605/front-template/commit/36acb5d))
 
 
 
