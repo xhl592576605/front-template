@@ -271,7 +271,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
         )
         $core.addIpcMainListener(
           IpcMainChannel.Core.CHANGE_MAIN_SERVER_ENV,
-          $core.changeMainServerEnv
+          (e, env) => $core.changeMainServerEnv(env)
         )
 
         $core.addIpcMainListener(IpcMainChannel.App.QUIT, $core.appQuit)

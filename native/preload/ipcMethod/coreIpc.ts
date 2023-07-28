@@ -6,7 +6,7 @@ export default {
   getCoreConfig: () => ipcRenderer.invoke(IpcMainChannel.Core.GET_CONFIG),
 
   /** 获取core的选项 */
-  getCoreOption: () => ipcRenderer.invoke(IpcMainChannel.Core.GET_CONFIG),
+  getCoreOptions: () => ipcRenderer.invoke(IpcMainChannel.Core.GET_OPTIONS),
   /**
    * 更改主服务的环境，会重启，指向对应的环境的web
    * @param env
