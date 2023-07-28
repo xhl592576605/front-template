@@ -1,3 +1,12 @@
+## <small>0.0.18 (2023-07-28)</small>
+
+* fix: 测试 ([a6c299b](https://github.com/xhl592576605/front-template/commit/a6c299b))
+* fix: 测试 ([0f8e473](https://github.com/xhl592576605/front-template/commit/0f8e473))
+* fix: 测试 ([33f82ec](https://github.com/xhl592576605/front-template/commit/33f82ec))
+* add new version 0.0.17 ([36acb5d](https://github.com/xhl592576605/front-template/commit/36acb5d))
+
+
+
 ## <small>0.0.17 (2023-07-28)</small>
 
 * fix: 测试提交钩子 ([2d10c19](https://github.com/xhl592576605/front-template/commit/2d10c19))
