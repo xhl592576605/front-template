@@ -229,10 +229,10 @@ const main = () => {
     .then(updateTags)
     .then(installDependencies)
     .then(compileCode)
-    .then(createTag)
+    .then(buildSoft)
     .then(buildChangeLog)
     .then(addCodeAndPush)
-    .then(buildSoft)
+    .then(createTag)
     .then(pushTag)
     .then(backToMaster)
     .catch((err) => {
