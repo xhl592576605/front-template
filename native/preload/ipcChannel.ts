@@ -16,6 +16,11 @@ export const IpcMainChannel = {
     FULLSCREEN: 'app:fullscreen',
     CLOSE: 'app:close',
     RESTORE_MAIN_WINDOW: 'app:restore-main-window'
+  },
+  AutoUpdate: {
+    CHECK_UPDATES: 'auto-update:check-updates',
+    DOWNLOAD_UPDATE: 'auto-update:download-update',
+    INSTALL_UPDATE: 'auto-update:install-update'
   }
 }
 
@@ -32,5 +37,7 @@ export const IpcWebContentChannel = {
     UPDATE_AVAILABLE: 'auto-update:update-available',
     UPDATE_NOT_AVAILABLE: 'auto-update:update-not-available',
     DOWNLOAD_PROGRESS: 'auto-update:download-progress',
+    UPDATE_DOWNLOADED: 'auto-update:update-downloaded',
+    UPDATE_CANCELLED: 'auto-update:update-cancelled'
   }
 }

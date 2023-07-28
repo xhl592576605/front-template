@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IpcMainChannel, IpcWebContentChannel } from './ipcChannel'
 import AppIpc from './ipcMethod/appIpc'
+import AutoUpdateIpc from './ipcMethod/autoUpdateIpc'
 import CoreIpc from './ipcMethod/coreIpc'
 
 /** 环境标识位 */
@@ -68,5 +69,9 @@ contextBridge.exposeInMainWorld('Electron', {
   /**
    * APP方法
    */
-  App: AppIpc
+  App: AppIpc,
+  /**
+   * 软件更新方法
+   */
+  AutoUpdate: AutoUpdateIpc
 })
