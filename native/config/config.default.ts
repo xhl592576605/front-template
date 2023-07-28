@@ -62,7 +62,7 @@ export default ($core: Core) => {
     preloadPath,
     autoUpdate: {
       provider: 'generic',
-      url: 'http://127.0.0.1:80801'
+      url: 'http://127.0.0.1:8080'
     }
   }
 
