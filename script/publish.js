@@ -195,8 +195,13 @@ const buildSoft = ({ tag }) => {
 const buildChangeLog = ({ branch, tag }) => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    shell.exec('npm run changelog')
-    resolve({ branch, tag })
+    shell.exec('npm run changelog ', (code, stdout) => {
+      if (code === 0) {
+        resolve({ branch, tag })
+      } else if (code === 1) {
+        reject('生成 changelog 失败')
+      }
+    })
   })
 }
 
