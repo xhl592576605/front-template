@@ -240,7 +240,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
           _level = 3
           break
       }
-      const _message = message.replace(matchStr + '-', '')
+      let _message = message.replace(matchStr + '-', '')
       return {
         level: _level,
         message: _message
