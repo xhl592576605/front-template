@@ -12,7 +12,8 @@ const checkBranchMaster = () => {
     shell.cd(basePath)
     let branch = shell.exec('git branch | grep "*"', { silent: true }).stdout
     branch = branch.replace('*', '').trim()
-    if (branch !== 'master') {
+    if (branch !== 'electron-senior') {
+      // todo：这里需要修改master
       reject('不是处于master分支')
       return
     }
@@ -191,6 +192,14 @@ const buildSoft = ({ tag }) => {
   })
 }
 
+const buildChangeLog = () => {
+  return new Promise((resolve, reject) => {
+    shell.cd(basePath)
+    shell.exec('npm run changelog')
+    resolve()
+  })
+}
+
 const backToMaster = () => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
@@ -215,8 +224,9 @@ const main = () => {
     .then(updateTags)
     .then(installDependencies)
     .then(compileCode)
-    .then(addCodeAndPush)
     .then(createTag)
+    .then(buildChangeLog)
+    .then(addCodeAndPush)
     .then(buildSoft)
     .then(pushTag)
     .then(backToMaster)
