@@ -39,7 +39,7 @@
     "cz": "cz",
     "postinstall": "electron-builder install-app-deps",
     "prepare": "husky install",
-    "changelog": "conventional-changelog -p GitHub -i CHANGELOG.md -s -r 0"
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -k  -t -s -r 0"
   },
   "keywords": [],
   "license": "ISC",
