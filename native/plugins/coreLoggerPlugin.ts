@@ -139,7 +139,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
     )
     $core.lifeCycle.awaitWebRequestOnBeforeSendHeaders.tapPromise(
       loggerKeyObj,
-      async (beforeSendResponse, detail, core) => {
+      async (beforeSendResponse, detail) => {
         beforeSendResponse.requestHeaders = {
           ...beforeSendResponse.requestHeaders,
           'Electron-Client-Name': $core.options.appName,
@@ -174,7 +174,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
 
     $core.lifeCycle.awaitWebRequestOnCompleted.tapPromise(
       loggerKeyObj,
-      async (details, core) => {
+      async (details) => {
         const { id } = details
         const netLogObj = netLogObjMap.get(id)
         if (netLogObj) {
@@ -193,7 +193,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
 
     $core.lifeCycle.awaitWebRequestOnErrorOccurred.tapPromise(
       loggerKeyObj,
-      async (details, core) => {
+      async (details) => {
         const { id } = details
         const netLogObj = netLogObjMap.get(id)
         if (netLogObj) {
@@ -240,7 +240,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
           _level = 3
           break
       }
-      let _message = message.replace(matchStr + '-', '')
+      const _message = message.replace(matchStr + '-', '')
       return {
         level: _level,
         message: _message
@@ -273,7 +273,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
     }
 
     $core.lifeCycle.afterCreateMainWindow.tap(loggerKeyObj, async (core) => {
-      const { webContents } = core.mainWindow
+      const { webContents } = core.mainWindow || {}
       if (webContents) {
         webContents.addListener('console-message', (_event, level, message) => {
           logConsoleMessage(core.rendererLogger, level, message)

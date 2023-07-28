@@ -11,7 +11,7 @@ export default (core: Core) => {
       core.mainServer = null
     }
     const { homeDir } = core.options
-    const { remoteUrl, developmentMode, mainServer } = core.config
+    const { remoteUrl, developmentMode } = core.config
     const { default: selectMode, mode } = developmentMode
     const modeInfo = mode[selectMode]
 

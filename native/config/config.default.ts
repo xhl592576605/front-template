@@ -49,7 +49,7 @@ export default ($core: Core) => {
           preload: path.join($core.options.baseDir, 'preload/index.js'),
           webviewTag: true
         },
-        show: false // * 后续如果一启动要显示窗口，可以改为true
+        show: true
       },
       openDevTools: true,
       openAppMenu: true

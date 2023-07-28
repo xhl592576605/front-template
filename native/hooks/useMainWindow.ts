@@ -32,13 +32,13 @@ export default (core: Core) => {
     if (!mainWindow) {
       mainWindow = createWindow()
       mainWindow.on('closed', () => {
-        mainWindow = null;
+        mainWindow = null
       })
     }
     return mainWindow
   }
 
   return {
-    getMainWindow,
+    getMainWindow
   }
 }

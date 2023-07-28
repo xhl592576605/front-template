@@ -213,7 +213,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
          * 4. 窗口加载本地web服务
          */
         try {
-          let { port, portRange } = $core.config.mainServer!
+          const { port, portRange } = $core.config.mainServer!
           const _port = await getPort(port!, portRange)
           $core.mainLogger.info('$core.config.mainServer 获取到的端口', _port)
           await createElectronApp()
@@ -281,7 +281,7 @@ export default class CoreMainWindowPlugin implements CorePlugin {
         $core.addIpcMainListener(IpcMainChannel.App.MINIMIZE, $core.minimize)
         $core.addIpcMainListener(
           IpcMainChannel.App.FULLSCREEN,
-          (e, iFullScreen: boolean = true) => $core.fullScreen(iFullScreen)
+          (e, iFullScreen = true) => $core.fullScreen(iFullScreen)
         )
         $core.addIpcMainListener(
           IpcMainChannel.App.RESTORE_MAIN_WINDOW,
