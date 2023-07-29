@@ -12,7 +12,8 @@ const checkBranchMaster = () => {
     shell.cd(basePath)
     let branch = shell.exec('git branch | grep "*"', { silent: true }).stdout
     branch = branch.replace('*', '').trim()
-    if (branch !== 'master') {
+    if (branch !== 'electron-senior') {
+      // todo：这里需要修改master
       reject('不是处于master分支')
       return
     }
@@ -139,12 +140,13 @@ const createTag = ({ branch, tag }) => {
   })
 }
 
-const pushTag = (tag) => {
+const pushTag = ({ tag }) => {
   return new Promise((resolve, reject) => {
     log.info(`push new tag ${tag}`)
     shell.cd(basePath)
     shell.exec(`git push origin ${tag}`, (code) => {
       if (code !== 0) {
+        deleteTag(tag)
         reject(`tag ${tag}: 推送到远端失败`)
         return
       }
@@ -168,22 +170,23 @@ const deleteTag = (tag) => {
   })
 }
 
-const buildSoft = ({ tag }) => {
+const buildSoft = ({ branch, tag }) => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    const checkOutCode = shell.exec(`git checkout ${tag}`).code
-    if (checkOutCode !== 0) {
-      reject(`切换tag ${tag} 失败`)
-      return
-    }
+    // const checkOutCode = shell.exec(`git checkout ${tag}`).code
+    // if (checkOutCode !== 0) {
+    //   reject(`切换tag ${tag} 失败`)
+    //   return
+    // }
     try {
       log.info('build electron ')
       buildElectron(tag)
-        .then(() => resolve(tag))
+        .then(() => resolve({ branch, tag }))
         .catch((err) => {
-          deleteTag(tag).then(() => {
-            reject('build electron failed: ' + err.message)
-          })
+          reject('build electron failed: ' + err.message)
+          // deleteTag(tag).then(() => {
+          //   reject('build electron failed: ' + err.message)
+          // })
         })
     } catch (e) {
       reject('更新包的版本号失败')
@@ -191,10 +194,23 @@ const buildSoft = ({ tag }) => {
   })
 }
 
+const buildChangeLog = ({ branch, tag }) => {
+  return new Promise((resolve, reject) => {
+    shell.cd(basePath)
+    shell.exec('npm run changelog ', (code, stdout) => {
+      if (code === 0) {
+        resolve({ branch, tag })
+      } else if (code === 1) {
+        reject('生成 changelog 失败')
+      }
+    })
+  })
+}
+
 const backToMaster = () => {
   return new Promise((resolve, reject) => {
     shell.cd(basePath)
-    shell.exec('git checkout electron-senior')
+    shell.exec('git checkout electron-senior') // todo: 后续要改成master
     setTimeout(resolve, 1000)
   })
 }
@@ -215,9 +231,10 @@ const main = () => {
     .then(updateTags)
     .then(installDependencies)
     .then(compileCode)
+    .then(buildSoft)
+    .then(buildChangeLog)
     .then(addCodeAndPush)
     .then(createTag)
-    .then(buildSoft)
     .then(pushTag)
     .then(backToMaster)
     .catch((err) => {

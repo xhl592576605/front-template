@@ -1,6 +1,6 @@
 {
   "name": "front-template",
-  "version": "0.0.16",
+  "version": "0.0.19",
   "description": "front-template",
   "main": "native-out/main.js",
   "author": {
@@ -39,7 +39,7 @@
     "cz": "cz",
     "postinstall": "electron-builder install-app-deps",
     "prepare": "husky install",
-    "changelog": "conventional-changelog -p GitHub -i CHANGELOG.md -s -r 0"
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -k  -t -s -r 0"
   },
   "keywords": [],
   "license": "ISC",
@@ -64,6 +64,7 @@
     "conventional-changelog-cli": "^3.0.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
     "electron": "^22.3.6",
     "electron-builder": "^23.6.0",
     "eslint": "^8.37.0",
