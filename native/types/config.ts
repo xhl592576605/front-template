@@ -80,6 +80,10 @@ export interface ApplicationConfig {
     provider: string
     url: string
   }
+  setting?: {
+    icePointPath?: string
+    SoundOutputDelayTime?: number
+  }
 }
 
 export enum DevelopmentMode {

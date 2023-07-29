@@ -54,7 +54,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
         upload?: boolean
       }
     ) => {
-      //todo: 要做上传日志的业务
+      //todo: 要做上传日志的业务 寻找日志文件夹时，如果有冰点路径，就使用冰点路径，否则使用默认路径来创建日志文件夹
     }
 
     const loggerKeyObj = {
@@ -64,7 +64,9 @@ export default class CoreLoggerPlugin implements CorePlugin {
 
     //! 日志模块初始化
     $core.lifeCycle.awaitInitLogger.tapPromise(loggerKeyObj, async () => {
-      const logPath = $core.config.logger.dir
+      // * 如果有冰点路径，就使用冰点路径，否则使用默认路径来创建日志文件夹
+      const logPath =
+        $core.config.setting?.icePointPath || $core.config.logger.dir
       if (!fs.existsSync(logPath)) {
         fs.mkdirSync(logPath, { recursive: true })
       }
@@ -240,7 +242,7 @@ export default class CoreLoggerPlugin implements CorePlugin {
           _level = 3
           break
       }
-      let _message = message.replace(matchStr + '-', '')
+      const _message = message.replace(matchStr + '-', '')
       return {
         level: _level,
         message: _message

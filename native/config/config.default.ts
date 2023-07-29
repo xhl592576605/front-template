@@ -64,6 +64,9 @@ export default ($core: Core) => {
       provider: 'generic',
       url: 'http://127.0.0.1:8080'
     }
+    // setting: {
+    //   icePointPath: 'E:\\ICE_POINT'
+    // }
   }
 
   return config

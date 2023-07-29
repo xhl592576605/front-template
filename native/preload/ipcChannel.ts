@@ -38,6 +38,7 @@ export const IpcWebContentChannel = {
     UPDATE_NOT_AVAILABLE: 'auto-update:update-not-available',
     DOWNLOAD_PROGRESS: 'auto-update:download-progress',
     UPDATE_DOWNLOADED: 'auto-update:update-downloaded',
-    UPDATE_CANCELLED: 'auto-update:update-cancelled'
+    UPDATE_CANCELLED: 'auto-update:update-cancelled',
+    CAN_INSTALL_UPDATE: 'auto-update:can-install-update'
   }
 }

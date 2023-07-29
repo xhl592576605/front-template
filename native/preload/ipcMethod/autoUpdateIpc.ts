@@ -24,10 +24,27 @@ export default {
       IpcWebContentChannel.AutoUpdate.DOWNLOAD_PROGRESS,
       listener
     ),
+  // 仅在非自动下载时有效
+  onUpdateDownloaded: (listener: (...args: any[]) => void) =>
+    ipcRenderer.addListener(
+      IpcWebContentChannel.AutoUpdate.UPDATE_DOWNLOADED,
+      listener
+    ),
+
+  onUpdateCancelled: (listener: (...args: any[]) => void) =>
+    ipcRenderer.addListener(
+      IpcWebContentChannel.AutoUpdate.UPDATE_CANCELLED,
+      listener
+    ),
+  onCanInstallUpdate: (listener: (...args: any[]) => void) =>
+    ipcRenderer.addListener(
+      IpcWebContentChannel.AutoUpdate.CAN_INSTALL_UPDATE,
+      listener
+    ),
 
   // 仅在非自动下载时有效
-  checkUpdates: () =>
-    ipcRenderer.invoke(IpcMainChannel.AutoUpdate.CHECK_UPDATES),
+  checkUpdates: (url: string, desc: string) =>
+    ipcRenderer.invoke(IpcMainChannel.AutoUpdate.CHECK_UPDATES, url, desc),
   downloadUpdate: () =>
     ipcRenderer.invoke(IpcMainChannel.AutoUpdate.DOWNLOAD_UPDATE),
   installUpdate: () =>

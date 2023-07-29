@@ -10,6 +10,6 @@ export default [
   new CoreLoggerPlugin(),
   new CoreIpcPlugin(),
   new CoreMainWindowPlugin(),
-  new CoreAutoUpdatePlugin()
+  new CoreAutoUpdatePlugin(false)
 ]
 export { CorePlugin }
