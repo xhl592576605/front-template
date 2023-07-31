@@ -80,12 +80,13 @@ export interface ApplicationConfig {
     provider: string
     url: string
   }
-  setting?: {
-    icePointPath?: string
-    SoundOutputDelayTime?: number
-  }
+  setting?: ApplicationSetting
 }
 
+export interface ApplicationSetting {
+  icePointPath?: string
+  soundOutputDelayTime?: number
+}
 export enum DevelopmentMode {
   vue = 'vue',
   react = 'react',

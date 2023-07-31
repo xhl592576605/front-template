@@ -5,9 +5,10 @@ import {
   OnSendHeadersListenerDetails
 } from 'electron'
 import { ElectronLog, LogFunctions } from 'electron-log'
-import fs from 'fs'
+import fs from 'fs-extra'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
+import path from 'path'
 import { v4 as createUUID } from 'uuid'
 import Core from '../core'
 import * as Exception from '../exception'
@@ -61,17 +62,42 @@ export default class CoreLoggerPlugin implements CorePlugin {
       name: this.name,
       stage: -1
     }
+    const getLogPath = () => {
+      let logPath = $core.config.logger.dir
+      if ($core.config.setting?.icePointPath) {
+        logPath = path.join($core.config.setting?.icePointPath, 'logs')
+      }
+      return logPath
+    }
+
+    /**
+     * 将当前存放的日志文件夹移到指定位置，需要重新启动
+     * @param destPath
+     * @returns
+     */
+    const moveLogFiles = (destPath: string) => {
+      const srcLogPath = getLogPath()
+      if (!fs.existsSync(srcLogPath)) {
+        $core.mainLogger.error(`move log file:${srcLogPath} no exists`)
+        return
+      }
+      fs.moveSync(srcLogPath, path.join(destPath, 'logs'), {
+        overwrite: true
+      })
+      $core.mainLogger.info(
+        `move log file:${srcLogPath} to ${destPath} success`
+      )
+    }
 
     //! 日志模块初始化
     $core.lifeCycle.awaitInitLogger.tapPromise(loggerKeyObj, async () => {
       // * 如果有冰点路径，就使用冰点路径，否则使用默认路径来创建日志文件夹
-      const logPath =
-        $core.config.setting?.icePointPath || $core.config.logger.dir
+      const logPath = getLogPath()
       if (!fs.existsSync(logPath)) {
         fs.mkdirSync(logPath, { recursive: true })
       }
       $core.logger = createLogger('main', {
-        logPath,
+        logPath: getLogPath(), // 创建时，使用函数，保证日志记录到正确的文件夹
         ...$core.config.logger
       })
       $core.mainLogger = $core.logger.scope('main')
@@ -85,6 +111,8 @@ export default class CoreLoggerPlugin implements CorePlugin {
       // 在日志模块初始化后，捕获全局异常，写入日志
       Exception.start($core.mainLogger)
       $core.reportLog = reportLog.bind($core)
+      $core.getLogPath = getLogPath.bind($core)
+      $core.moveLogFiles = moveLogFiles.bind($core)
     })
 
     //! 网络日志记录

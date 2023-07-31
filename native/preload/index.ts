@@ -75,3 +75,15 @@ contextBridge.exposeInMainWorld('Electron', {
    */
   AutoUpdate: AutoUpdateIpc
 })
+
+/**
+ * 一些初始化导出的工具函数，对象，值能
+ */
+const initExposeUtil = async () => {
+  const SoundOutputDelayTime = await ipcRenderer.invoke(
+    IpcMainChannel.App.GET_SOUND_OUTPUT_DELAY_TIME
+  )
+  contextBridge.exposeInMainWorld('SoundOutputDelayTime', SoundOutputDelayTime)
+}
+
+initExposeUtil()

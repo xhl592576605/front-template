@@ -15,7 +15,10 @@ export const IpcMainChannel = {
     MINIMIZE: 'app:minimize',
     FULLSCREEN: 'app:fullscreen',
     CLOSE: 'app:close',
-    RESTORE_MAIN_WINDOW: 'app:restore-main-window'
+    RESTORE_MAIN_WINDOW: 'app:restore-main-window',
+    GET_SETTING: 'app:get-setting',
+    CHANGE_SETTING: 'app:change-setting',
+    GET_SOUND_OUTPUT_DELAY_TIME: 'app:get-sound-output-delay-time'
   },
   AutoUpdate: {
     CHECK_UPDATES: 'auto-update:check-updates',

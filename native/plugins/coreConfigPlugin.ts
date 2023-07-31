@@ -1,5 +1,5 @@
 import debug from 'debug'
-import fs from 'fs'
+import fs from 'fs-extra'
 import merge from 'lodash/merge'
 import path from 'path'
 import yaml from 'yaml'
@@ -11,7 +11,7 @@ import loadModule from '../utils/loadModule'
 import { CorePlugin } from './corePlugin'
 /**
  * 配置插件
- * ! 该插件需要最先加载, 以保证其他插件可以使用配置,并且要保证配置路径逻辑都要正确
+ * ! 该插件需要最先加载, 以保证其他插件可以使用配置,并且要保证配置路径逻辑都要正确,但部分日志记录要判断下生命周期，看下日志模块是否已经初始化了
  * @export
  * @class CoreConfigPlugin
  * @implements {CorePlugin}
@@ -51,11 +51,33 @@ export default class CoreConfigPlugin implements CorePlugin {
     }
 
     /**
+     * 将默认的配置文件移到安装目录第下
+     */
+    const moveConfigFileToDeepFreezePath = () => {
+      const { userHome, execDir } = $core.options
+
+      const configPath = path.join(userHome, CONFIG_FILE_NAME)
+      const deepFreezeConfigPath = path.join(execDir, '../', CONFIG_FILE_NAME)
+      fs.moveSync(configPath, deepFreezeConfigPath)
+      $core?.mainLogger?.info(
+        ` move configFile to deepFreezePath:${configPath};destPath:${deepFreezeConfigPath}`
+      )
+    }
+
+    /**
      * 保存配置文件
      */
     const updateConfigFile = () => {
       const configStr = yaml.stringify($core.config)
-      fs.writeFileSync(getConfigFilePath(), configStr, 'utf-8')
+      const configPath = getConfigFilePath()
+      fs.writeFileSync(configPath, configStr, 'utf-8')
+      $core?.mainLogger?.info(
+        `update config path:${configPath};value:${JSON.stringify(
+          $core.config,
+          null,
+          0
+        )}`
+      )
     }
 
     /**
@@ -116,6 +138,8 @@ export default class CoreConfigPlugin implements CorePlugin {
 
         $core.updateConfigFile = updateConfigFile.bind($core)
         $core.getConfigFilePath = getConfigFilePath.bind($core)
+        $core.moveConfigFileToDeepFreezePath =
+          moveConfigFileToDeepFreezePath.bind($core)
       } catch (e: any) {
         this.debug('awaitGetConfig:%j', e.message)
       }

@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { isPackaged } from '../ps'
 export interface CreateLoggerOption {
-  logPath: string
+  logPath: string | (() => string)
   fileName: string
   maxSize?: number
   archiveLog?: (oldLogFile: LogFile) => void
@@ -16,8 +16,12 @@ export default (logId: string, option: CreateLoggerOption) => {
   const logger = ElectronLog.create(logId)
   logger.transports.file.resolvePath = () => {
     if (isPackaged()) {
+      let logPath = option.logPath
+      if (option.logPath instanceof Function) {
+        logPath = option.logPath()
+      }
       return path.join(
-        option.logPath,
+        logPath as string,
         `${dayjs().format('YYYY-MM-DD')}/${option.fileName}`
       )
     }

@@ -13,6 +13,8 @@ export default class BaseCore {
   declare getConfigFilePath: () => string
   /** 更新配置文件到本地 */
   declare updateConfigFile: () => void
+  /** 将配置文件移到安装目录底下，适用于windows */
+  declare moveConfigFileToDeepFreezePath: () => void
 
   /** 日志记录对象 */
   declare logger: ElectronLog
@@ -24,6 +26,11 @@ export default class BaseCore {
   declare rendererLogger: LogFunctions
   /** webview日志记录对象 */
   declare webViewLogger: LogFunctions
+
+  /** 获取当前存放日志的文件夹 */
+  declare getLogPath: () => string
+  /** 将当前存放的日志文件夹移到指定位置，需要重新启动 */
+  declare moveLogFiles: (destPath: string) => void
 
   /**
    * 上报日志
