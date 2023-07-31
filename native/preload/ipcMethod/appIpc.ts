@@ -16,7 +16,8 @@ export default {
   // 关于应用设置
   getSetting: () => ipcRenderer.invoke(IpcMainChannel.App.GET_SETTING),
   changeSetting: (setting: any) =>
-    ipcRenderer.invoke(IpcMainChannel.App.CHANGE_SETTING, setting)
+    ipcRenderer.invoke(IpcMainChannel.App.CHANGE_SETTING, setting),
 
   // 一些工具函数
+  getLogFileBuffer: () => ipcRenderer.invoke(IpcMainChannel.App.GET_LOG_BUFFER)
 }

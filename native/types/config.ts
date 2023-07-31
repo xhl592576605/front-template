@@ -74,6 +74,7 @@ export interface ApplicationConfig {
     level?: LevelOption
     format?: string
     console?: boolean
+    latestNum?: number
   }
   preloadPath: string
   autoUpdate?: {

@@ -18,7 +18,8 @@ export const IpcMainChannel = {
     RESTORE_MAIN_WINDOW: 'app:restore-main-window',
     GET_SETTING: 'app:get-setting',
     CHANGE_SETTING: 'app:change-setting',
-    GET_SOUND_OUTPUT_DELAY_TIME: 'app:get-sound-output-delay-time'
+    GET_SOUND_OUTPUT_DELAY_TIME: 'app:get-sound-output-delay-time',
+    GET_LOG_BUFFER: 'app:get-log-buffer'
   },
   AutoUpdate: {
     CHECK_UPDATES: 'auto-update:check-updates',

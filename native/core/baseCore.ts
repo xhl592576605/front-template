@@ -33,20 +33,9 @@ export default class BaseCore {
   declare moveLogFiles: (destPath: string) => void
 
   /**
-   * 上报日志
-   * @param submitUrl 上报地址
-   * @param header 请求头
+   * 获取日志文件Buffer
    */
-  declare reportLog: (
-    submitUrl: string,
-    data: Record<string, any>,
-    header?: Record<string, any>,
-    options?: {
-      latest?: boolean
-      day?: number
-      upload?: boolean
-    }
-  ) => void
+  declare getLogFileBuffer: () => Buffer
 
   /** 执行webview的日志记录 */
   declare execWebViewLog: (level: number, message: string) => void

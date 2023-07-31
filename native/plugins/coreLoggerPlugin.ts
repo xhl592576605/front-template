@@ -1,3 +1,5 @@
+import AdmZip from 'adm-zip'
+import dayjs from 'dayjs'
 import {
   OnBeforeRequestListenerDetails,
   OnCompletedListenerDetails,
@@ -12,6 +14,7 @@ import path from 'path'
 import { v4 as createUUID } from 'uuid'
 import Core from '../core'
 import * as Exception from '../exception'
+import { IpcMainChannel } from '../preload/ipcChannel'
 import { isMainServerProd } from '../ps'
 import { encrypt } from '../utils/crypto'
 import createLogger from '../utils/logger'
@@ -45,23 +48,31 @@ export default class CoreLoggerPlugin implements CorePlugin {
   name = 'core-logger-plugin'
 
   apply($core: Core) {
-    const reportLog = (
-      submitUrl: string,
-      data: Record<string, any>,
-      header?: Record<string, any>,
-      options?: {
-        latest?: boolean
-        day?: number
-        upload?: boolean
-      }
-    ) => {
-      //todo: 要做上传日志的业务 寻找日志文件夹时，如果有冰点路径，就使用冰点路径，否则使用默认路径来创建日志文件夹
-    }
-
     const loggerKeyObj = {
       name: this.name,
       stage: -1
     }
+
+    /**
+     *  排序日志文件夹，按照时间最新降序
+     * @returns
+     */
+    const sortLogPath = () => {
+      const logPath = getLogPath()
+      // 读取logPath下的所有文件夹,按照时间排序
+      const dirs =
+        fs
+          .readdirSync(logPath)
+          .map((dir) => path.join(logPath, dir))
+          .filter((dir) => fs.statSync(dir).isDirectory())
+          .sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs) || []
+      return dirs
+    }
+
+    /**
+     * 获取日志文件夹路径，在开发时，获取的还是软件的日志保存，但是真实记录却是在项目的日志文件夹下
+     * @returns
+     */
     const getLogPath = () => {
       let logPath = $core.config.logger.dir
       if ($core.config.setting?.icePointPath) {
@@ -89,6 +100,32 @@ export default class CoreLoggerPlugin implements CorePlugin {
       )
     }
 
+    /**
+     * 保留最近的日志文件夹数量，移除多余的日志文件夹
+     * @param latestNum 保留最近的日志文件夹数量
+     */
+    const removeLogFiles = (latestNum: number) => {
+      return new Promise<void>(() => {
+        const dirs = sortLogPath()
+        //去掉除了最近的latestNum个文件夹
+        dirs.slice(latestNum).forEach((dir) => fs.removeSync(dir))
+      })
+    }
+
+    const getLogFileBuffer = () => {
+      const logName = `${
+        $core.options.mac.toUpperCase()?.replace(/:/g, '') || 'MAC'
+      }-${dayjs().format('YYYY-MM-DD')}`
+      let dirs = sortLogPath()
+      dirs = dirs.slice(0, $core.config.logger.latestNum || 3)
+      const zip = new AdmZip()
+      dirs.forEach((dir) => {
+        zip.addLocalFolder(dir, path.join(logName, path.basename(dir)))
+      })
+      const zipData = zip.toBuffer()
+      return zipData
+    }
+
     //! 日志模块初始化
     $core.lifeCycle.awaitInitLogger.tapPromise(loggerKeyObj, async () => {
       // * 如果有冰点路径，就使用冰点路径，否则使用默认路径来创建日志文件夹
@@ -110,9 +147,20 @@ export default class CoreLoggerPlugin implements CorePlugin {
       )
       // 在日志模块初始化后，捕获全局异常，写入日志
       Exception.start($core.mainLogger)
-      $core.reportLog = reportLog.bind($core)
+      $core.getLogFileBuffer = getLogFileBuffer.bind($core)
       $core.getLogPath = getLogPath.bind($core)
       $core.moveLogFiles = moveLogFiles.bind($core)
+    })
+
+    $core.lifeCycle.beforeAppQuit.tap(loggerKeyObj, async () => {
+      // 退出时，移除多余的日志文件夹
+      removeLogFiles($core.config.logger.latestNum || 3)
+    })
+
+    $core.lifeCycle.afterCreateMainWindow.tap(this.name, () => {
+      $core.addIpcMainListener(IpcMainChannel.App.GET_LOG_BUFFER, () =>
+        $core.getLogFileBuffer()
+      )
     })
 
     //! 网络日志记录
