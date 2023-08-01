@@ -29,6 +29,7 @@
     "build-wz-arm64": "electron-builder -w=7z --arm64 --config ./script/build/config/window.js ",
     "build-m": "electron-builder -m --config ./script/build/config/mac.js ",
     "build-m-arm64": "electron-builder -m --arm64 --config ./script/build/config/mac.js ",
+    "build-m-64": "electron-builder -m --x64 --config ./script/build/config/mac.js ",
     "build-l": "electron-builder -l=deb --x64 --config ./script/build/config/mac.js ",
     "build-l-32": "electron-builder -l=deb --ia32 --config ./script/build/config/linux.js ",
     "build-l-64": "electron-builder -l=deb --x64 --config ./script/build/config/linux.js ",

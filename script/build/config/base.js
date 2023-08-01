@@ -1,11 +1,9 @@
-const { version } = require('../../../package.json')
-
 module.exports = {
   productName: 'hans',
   appId: 'com.electron.hans',
   copyright: 'Copyright © 2011-' + new Date().getFullYear() + ' HANS',
   directories: {
-    output: `builder-out/${version}/${process.platform}`
+    output: 'builder-out/${version}/${os}/${arch}'
   },
   asar: true,
   files: [
