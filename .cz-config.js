@@ -32,17 +32,15 @@ module.exports = {
   // scope 类型，针对 React 项目
   scopes: [
     ['components', '组件相关'],
-    ['hooks', 'hook 相关'],
-    ['hoc', 'HOC'],
-    ['utils', 'utils 相关'],
-    ['antd', '对 antd 主题的调整'],
-    ['element-ui', '对 element-ui 主题的调整'],
+    ['views', '视图相关'],
+    ['pages', '页面相关'],
+    ['ui', 'u调整i'],
     ['styles', '样式相关'],
+    ['hooks', 'hook 相关'],
+    ['utils', 'utils 相关'],
     ['deps', '项目依赖'],
-    ['auth', '对 auth 修改'],
-    ['other', '其他修改'],
     // 如果选择 custom ,后面会让你再输入一个自定义的 scope , 也可以不设置此项， 把后面的 allowCustomScopes 设置为 true
-    ['custom', '以上都不是？我要自定义']
+    // ['custom', '以上都不是？我要自定义']
   ].map(([value, description]) => {
     return {
       value,
@@ -80,7 +78,7 @@ module.exports = {
   },
 
   // 是否允许自定义填写 scope ，设置为 true ，会自动添加两个 scope 类型 [{ name: 'empty', value: false },{ name: 'custom', value: 'custom' }]
-  // allowCustomScopes: true,
+  allowCustomScopes: true,
   allowBreakingChanges: ['feat', 'fix'],
   // skip any questions you want
   // skipQuestions: [],
