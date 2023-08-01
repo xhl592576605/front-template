@@ -4,7 +4,7 @@ const { version } = require('../../../package.json')
 module.exports = {
   ...baseInfo,
   directories: {
-    output: `builder-out/${version}/mac`
+    output: `builder-out/${version}/mac/${process.arch}`
   },
   mac: {
     electronLanguages: ['zh_CN', 'en'],

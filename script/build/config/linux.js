@@ -4,7 +4,7 @@ const { version } = require('../../../package.json')
 module.exports = {
   ...baseInfo,
   directories: {
-    output: `builder-out/${version}/linux`
+    output: `builder-out/${version}/linux/${process.arch}`
   },
   linux: {
     icon: './build/icons/icon.icns',
