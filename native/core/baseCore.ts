@@ -81,15 +81,18 @@ export default class BaseCore {
 
   declare addIpcMainListener: (
     channel: string,
-    listener: (...args: any[]) => void
+    listener: (...args: any[]) => void,
+    log?: boolean
   ) => void
 
   declare addIpcMainListenerOnce: (
     channel: string,
-    listener: (...args: any[]) => void
+    listener: (...args: any[]) => void,
+    log?: boolean
   ) => void
 
   declare removeIpcMainListener: (channel: string) => void
 
   declare sendToIpcRenderer: (channel: string, ...args: any[]) => void
+  declare sendToIpcRendererByNoLog: (channel: string, ...args: any[]) => void
 }

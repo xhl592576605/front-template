@@ -15,11 +15,12 @@ export default class CoreIpcPlugin implements CorePlugin {
      */
     const addIpcMainListener = (
       channel: string,
-      listener: (...args: any[]) => void
+      listener: (...args: any[]) => void,
+      log = true
     ) => {
       ipcMainListenerChannels.push(channel)
       ipcMain.handle(channel, listener)
-      $core.mainLogger.info(`[ipcMain] add listener: ${channel}`)
+      log && $core.mainLogger.info(`[ipcMain] add listener: ${channel}`)
     }
 
     /**
@@ -29,7 +30,8 @@ export default class CoreIpcPlugin implements CorePlugin {
      */
     const addIpcMainListenerOnce = (
       channel: string,
-      listener: (...args: any[]) => void
+      listener: (...args: any[]) => void,
+      log = true
     ) => {
       ipcMainListenerChannels.push(channel)
       ipcMain.handleOnce(channel, (...args) => {
@@ -39,19 +41,19 @@ export default class CoreIpcPlugin implements CorePlugin {
         )
         return listener(...args)
       })
-      $core.mainLogger.info(`[ipcMain] add listener once: ${channel}`)
+      log && $core.mainLogger.info(`[ipcMain] add listener once: ${channel}`)
     }
 
     /**
      * 主进程移除监听
      * @param channel
      */
-    const removeIpcMainListener = (channel: string) => {
+    const removeIpcMainListener = (channel: string, log = true) => {
       ipcMain.removeHandler(channel)
       ipcMainListenerChannels = ipcMainListenerChannels.filter(
         (item) => item !== channel
       )
-      $core.mainLogger.info(`[ipcMain] remove listener : ${channel}`)
+      log && $core.mainLogger.info(`[ipcMain] remove listener : ${channel}`)
     }
 
     /**
@@ -68,6 +70,16 @@ export default class CoreIpcPlugin implements CorePlugin {
         $core.mainWindow.webContents.send(channel, ...args)
       }
     }
+    /**
+     * 主进程发送消息到渲染进程 没有日志，解决一些定时器一直发送，导致日志文件很大
+     * @param channel
+     * @param args
+     */
+    const sendToIpcRendererByNoLog = (channel: string, ...args: any[]) => {
+      if ($core.mainWindow) {
+        $core.mainWindow.webContents.send(channel, ...args)
+      }
+    }
 
     $core.lifeCycle.afterCreateMainWindow.tap(
       {
@@ -79,6 +91,7 @@ export default class CoreIpcPlugin implements CorePlugin {
         $core.addIpcMainListenerOnce = addIpcMainListenerOnce.bind($core)
         $core.removeIpcMainListener = removeIpcMainListener.bind($core)
         $core.sendToIpcRenderer = sendToIpcRenderer.bind($core)
+        $core.sendToIpcRendererByNoLog = sendToIpcRendererByNoLog.bind($core)
 
         /**
          * 注册是否有该ipc监听

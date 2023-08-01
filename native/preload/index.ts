@@ -3,6 +3,7 @@ import { IpcMainChannel, IpcWebContentChannel } from './ipcChannel'
 import AppIpc from './ipcMethod/appIpc'
 import AutoUpdateIpc from './ipcMethod/autoUpdateIpc'
 import CoreIpc from './ipcMethod/coreIpc'
+import NetIpc from './ipcMethod/netIpc'
 
 /** 环境标识位 */
 contextBridge.exposeInMainWorld('__ELECTRON__', true)
@@ -73,7 +74,9 @@ contextBridge.exposeInMainWorld('Electron', {
   /**
    * 软件更新方法
    */
-  AutoUpdate: AutoUpdateIpc
+  AutoUpdate: AutoUpdateIpc,
+
+  Net: NetIpc
 })
 
 /**

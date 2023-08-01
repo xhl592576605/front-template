@@ -25,6 +25,13 @@ export const IpcMainChannel = {
     CHECK_UPDATES: 'auto-update:check-updates',
     DOWNLOAD_UPDATE: 'auto-update:download-update',
     INSTALL_UPDATE: 'auto-update:install-update'
+  },
+  NetWork: {
+    DNS_CHECK: 'network:dns-check',
+    PING_CHECK: 'network:ping-check',
+    HTTP_CHECK: 'network:http-check',
+    DOWNLOAD_SPEED_CHECK: 'network:download-speed-check',
+    GET_REALTIME_NET_SPEED_CHECK: 'network:get-realtime-net-speed-check'
   }
 }
 
@@ -44,5 +51,9 @@ export const IpcWebContentChannel = {
     UPDATE_DOWNLOADED: 'auto-update:update-downloaded',
     UPDATE_CANCELLED: 'auto-update:update-cancelled',
     CAN_INSTALL_UPDATE: 'auto-update:can-install-update'
+  },
+  NetWork: {
+    NetStatus: 'network:net-status',
+    NetRealSpeed: 'network:net-real-speed'
   }
 }
