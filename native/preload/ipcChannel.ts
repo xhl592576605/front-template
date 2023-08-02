@@ -31,7 +31,9 @@ export const IpcMainChannel = {
     PING_CHECK: 'network:ping-check',
     HTTP_CHECK: 'network:http-check',
     DOWNLOAD_SPEED_CHECK: 'network:download-speed-check',
-    GET_REALTIME_NET_SPEED_CHECK: 'network:get-realtime-net-speed-check'
+    GET_REALTIME_NET_SPEED_CHECK: 'network:get-realtime-net-speed-check',
+    LOCAL_DATE_CHECK: 'network:local-date-check',
+    CHANGE_LOCAL_DATE: 'network:change-local-date'
   }
 }
 

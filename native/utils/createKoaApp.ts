@@ -5,6 +5,7 @@ import Koa from 'koa'
 import KoaStatic, { Options as KoaStaticOption } from 'koa-static'
 import historyApiFallback from 'koa2-connect-history-api-fallback'
 import KoaCors from 'koa2-cors'
+import { isDev } from '../ps'
 
 /**
  * 创建koa应用
@@ -31,6 +32,7 @@ export default (
     (resolve, reject) => {
       try {
         const app = new Koa(koaOption)
+        app.silent = true
         app
           .use(historyApiFallback())
           .use(KoaCors())
@@ -38,7 +40,7 @@ export default (
             KoaStatic(
               staticDir,
               koaStaticOption || {
-                maxAge: 24 * 60 * 60 * 1000,
+                maxAge: isDev() ? 0 : 24 * 60 * 60 * 1000,
                 gzip: true
               }
             )

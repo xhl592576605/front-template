@@ -6,6 +6,7 @@ import CoreMainWindowPlugin from './coreMainWindowPlugin'
 import CoreNetCheckPlugin from './coreNetCheckPlugin'
 import { CorePlugin } from './corePlugin'
 import CoreSettingPlugin from './coreSettingPlugin'
+import CoreTimeCheckPlugin from './coreTimeCheckPlugin'
 
 export default [
   new CoreConfigPlugin(),
@@ -14,6 +15,7 @@ export default [
   new CoreMainWindowPlugin(),
   new CoreAutoUpdatePlugin(false),
   new CoreSettingPlugin(),
-  new CoreNetCheckPlugin()
+  new CoreNetCheckPlugin(),
+  new CoreTimeCheckPlugin()
 ]
 export { CorePlugin }
